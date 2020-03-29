@@ -1,0 +1,39 @@
+######################## common config : ########################
+#服务器配置
+server:
+  #获取异常信息
+  error:
+    include-exception: true
+  port: 8080
+
+#spring配置
+spring:
+  ## json时间格式设置
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  thymeleaf:
+    cache: false
+  datasource:
+    username: root
+    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/rbac?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+
+    #druid配置
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: admin
+        login-password: 1
+        allow: 127.0.0.1
+## json时间格式设置
+
+
+---
+#激活制定profiles
+

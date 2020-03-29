@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>基于springboot 的权限管理后台</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">layui 后台布局</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    admin
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">所有商品</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="javascript:;">列表三</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">解决方案</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">云市场</a></li>
+                <li class="layui-nav-item"><a href="">发布商品</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="layui-body">
+
+        <form class="layui-form" action="">
+            <div class="layui-form-item ">
+                <button class="layui-btn">查询</button>
+                <label class="layui-form-label">选择:</label>
+                <div class="layui-input-inline">
+                    <select name="city" lay-verify="" lay-search>
+                        <option value="010">layer</option>
+                        <option value="021">form</option>
+                        <option value="0571" selected>layim</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <!--表格-->
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+        <!--分页-->
+        <div id="test1"></div>
+        <!--页脚-->
+        <div class="layui-tab layui-tab-brief" lay-filter="demo">
+            <ul class="layui-tab-title">
+                <li>日期</li>
+                <li>上传</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item">
+                    <div id="laydateDemo"></div>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="layui-upload-drag" id="uploadDemo">
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                        <div class="layui-hide" id="uploadDemoView">
+                            <hr>
+                            <img src="" alt="上传成功后渲染" style="max-width: 100%">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['table','element','laydate','upload','form'] ,function(){
+
+           var table = layui.table  //table表格
+          ,laydate = layui.laydate  //日期
+          ,upload = layui.upload    //上传
+          ,element = layui.element //动态效果
+          ,form = layui.form
+           //执行一个 table 实例
+        table.render({
+            elem: '#test'
+            ,height: 420
+            ,url: '/list' //数据接口
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度
+            ,title: '用户表'
+            ,page: true
+            ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,totalRow: false //开启合计行
+            ,cols: [
+                [ //表头
+                 {type: 'checkbox', fixed: 'left'}
+                ,{field: 'id', title: 'ID',  sort: true}
+                ,{field: 'name', title: '用户名'}
+                ,{field: 'email', title: '邮箱', sort: true, totalRow: true}
+                ,{field: 'sex', title: '性别', sort: true,templet: function(res){if(res.sex == 1){return '男'}else{return '女'}}}
+                ,{field: 'age', title: '年龄', sort: true, totalRow: true}
+                ,{field: 'admin', title: '管理员',templet: function(res){if(res.admin == true){return '是'}else{return '否'}}}
+                ,{field: 'deptId', title: '部门'}
+                ,{field: 'birth', title: '生日'}
+                ,{fixed: 'right',width: 165, align:'center', toolbar: '#barDemo'}
+                ]
+                   ]
+            ,response: {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                ,statusCode: 200//规定成功的状态码，默认：0
+                ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                // ,countName: 'total' //规定数据总数的字段名称，默认：count
+                ,dataName: 'data' //规定数据列表的字段名称，默认：data
+            }
+            ,parseData: function(res) { //res 即为原始返回的数据
+                console.log(res.data);
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.data //解析数据列表
+                };
+            }
+        });
+        //将日期直接嵌套在指定容器中
+        var dateIns = laydate.render({
+            elem: '#laydateDemo'
+            ,position: 'static'
+            ,calendar: true //是否开启公历重要节日
+            ,mark: { //标记重要日子
+                '0-10-14': '生日'
+                ,'2020-01-18': '小年'
+                ,'2020-01-24': '除夕'
+                ,'2020-01-25': '春节'
+                ,'2020-02-01': '上班'
+            }
+            ,done: function(value, date, endDate){
+                if(date.year == 2017 && date.month == 11 && date.date == 30){
+                    dateIns.hint('一不小心就月底了呢');
+                }
+            }
+            ,change: function(value, date, endDate){
+                layer.msg(value)
+            }
+        });
+        //上传
+        upload.render({
+            elem: '#uploadDemo'
+            ,url: 'https://httpbin.org/post' //改成您自己的上传接口
+            ,done: function(res){
+                layer.msg('上传成功');
+                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
+                console.log(res)
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
