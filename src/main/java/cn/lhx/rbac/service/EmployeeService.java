@@ -4,6 +4,8 @@ import cn.lhx.rbac.base.Page;
 import cn.lhx.rbac.entity.Employee;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -20,6 +22,7 @@ public interface EmployeeService extends IService<Employee> {
      * @return 分页结果集
      */
     Map<String, Object> listPage(Page<Employee> page, Employee employee);
+
 
 
 

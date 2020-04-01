@@ -31,9 +31,12 @@ spring:
         login-username: admin
         login-password: 1
         allow: 127.0.0.1
-## json时间格式设置
 
-
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
 ---
 #激活制定profiles
 

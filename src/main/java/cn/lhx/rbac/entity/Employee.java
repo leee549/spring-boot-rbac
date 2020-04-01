@@ -1,5 +1,6 @@
 package cn.lhx.rbac.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
@@ -19,14 +20,16 @@ import java.util.Date;
 @AllArgsConstructor
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableId("id")
-    private Integer id;
+
+    @TableId(value = "id",type = IdType.AUTO)
+    private Long id;
     private String name;
     private String password;
     private String email;
     private Integer age;
     private Integer sex;
     private Boolean admin;
+    @TableField(value = "dept_id")
     private Long deptId;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birth;
