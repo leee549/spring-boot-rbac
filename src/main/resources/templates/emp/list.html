@@ -6,6 +6,7 @@
     <title>基于springboot 的权限管理后台</title>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}">
     <script th:src="@{/static/js/jquery/jquery.min.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -78,7 +79,7 @@
         © layui.com - 底部固定区域
     </div>
 </div>
-<script th:src="@{/static/layui/layui.js}"></script>
+
 <script>
     layui.use(['table', 'element', 'laydate', "layer", 'upload', 'form'], function () {
 
@@ -88,7 +89,7 @@
             , element = layui.element //动态效果
             , form = layui.form
             , layer = layui.layer //弹层
-
+            , $ = layui.jquery;
 
         //向世界问个好
         // layer.msg('欢迎访问');
@@ -100,9 +101,12 @@
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度
             , title: '用户表'
             , page: true
-            , done: function (res, curr, count) {
-                if (curr > 1 && res.data.length === 0) {
-                    table.reload('test', {page: {curr: 1}})
+            , done: function (res,curr) {
+                var beforeCurr = curr; // 获得当前页码
+                var dataLength = res.data.length; // 获得当前页的记录数
+                var count = res.count; // 获得总记录数
+                if(dataLength === 0 && count !== 0){ //如果当前页的记录数为0并且总记录数不为0
+                    table.reload('test', {page: {curr:beforeCurr-1}})
                 }
             }
             , toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -115,9 +119,9 @@
                     , {field: 'email', title: '邮箱', width: 200, sort: true, totalRow: true}
                     , {
                     field: 'sex', title: '性别', sort: true, width: 80, templet: function (res) {
-                        if (res.sex == 1) {
+                        if (res.sex === 1) {
                             return '男'
-                        } else {
+                        } else if (res.sex===0) {
                             return '女'
                         }
                     }
@@ -125,7 +129,7 @@
                     , {field: 'age', title: '年龄', width: 80, sort: true, totalRow: true}
                     , {
                     field: 'admin', title: '管理员', width: 80, templet: function (res) {
-                        if (res.admin == true) {
+                        if (res.admin === true) {
                             return '是'
                         } else {
                             return '否'
@@ -184,7 +188,7 @@
             } else if (layEvent === 'del') { //删除
                 //console.log("curr:"+tableIns.config.page.curr)
                 layer.confirm('真的删除行么', function (index) {
-                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     // layer.close(index);
                     //向服务端发送删除指令
                     $.ajax({
@@ -196,6 +200,7 @@
                             if (result) {
                                 console.log(result.length)
                                 layer.alert("删除:" + data.id + "成功");
+
                                 table.reload('test');
 
                             } else {
@@ -206,16 +211,50 @@
                 });
             } else if (layEvent === 'edit') { //编辑
                 //do something
-                window.location="/emp?id="+data.id
-                // $.ajax({
-                //     url: /emp/ + data.id,
-                //     type: 'get',
-                //     data: {id: data.id},
-                //     dataType: "json",
-                //     success: function (result) {
-                //
-                //     }
-                // });
+                // layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                console.log(data.id)
+
+                layer.open({
+                    //layer提供了5种层类型。可传入的值有：
+                    // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                    type: 2
+                    ,title: '编辑用户'
+                    ,content: 'empform'
+                    ,maxmin: true
+                    ,area: ['750px', '600px']
+                    // ,btn: ['确定', '取消']
+                    ,success:function (layero ,index) {
+                        //找到它的子窗口的body
+                        var body = layer.getChildFrame('body', index);
+                        //为子窗口元素赋值
+                        body.find("#id").val(data.id);
+                        body.find("#name").val(data.name);
+                        body.find("#birth").val(data.birth);
+                        body.find("#pass").val(data.password);
+                        body.find("#repass").val(data.password);
+                        body.find("#email").val(data.email);
+                        body.find("#age").val(data.age);
+                        // body.find("#admin").attr("checked",data.admin===true?'checked':false);
+                        // 超管回显并移除角色
+                        if (data.admin){
+                            body.find("#admin").attr("checked",'checked');
+                            body.find("#role").slideUp();//移除
+                    } else {
+                            body.find("#admin").attr("checked", false);
+                            body.find("#role").slideDown();//显示
+                        }
+                        body.find("input[name=sex][value="+data.sex+"]").attr("checked",'checked' );
+                        body.find("option[value="+data.deptId+"]").attr("selected",'selected' );
+
+                        //获取新窗口对象  不渲染回显不了按钮
+                        var iframeWindow = layero.find('iframe')[0].contentWindow;
+                        //重新渲染
+                        iframeWindow.layui.form.render();
+
+                    }
+
+                });
+
             }
         });
         //批量操作
@@ -247,6 +286,9 @@
                         layer.msg('请选择一行');
                     } else {
                         layer.confirm('真的删除所选行么', function (index) {
+                            // console.log(obj)
+                            // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                            // layer.close(index);
                             //console.log(ids);
                             // layer.close(index);
                             //向服务端发送删除指令

@@ -78,4 +78,9 @@ public class EmployeeController {
     Employee emp = employeeService.getById(id);
     return JsonResult.success(emp);
   }
+
+  @GetMapping("/empform")
+  public String to(){
+    return "emp/empform";
+  }
 }
