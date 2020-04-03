@@ -3,6 +3,7 @@ package cn.lhx.rbac.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -34,5 +36,5 @@ public class Employee implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birth;
     @TableField(exist = false)
-    private Department department;
+    private Department dept;
 }

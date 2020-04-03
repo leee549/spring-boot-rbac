@@ -32,11 +32,15 @@ spring:
         login-password: 1
         allow: 127.0.0.1
 
+
+
 mybatis-plus:
+
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
----
-#激活制定profiles
+#    别名
+  type-aliases-package: cn.lhx.rbac.entity
+
 

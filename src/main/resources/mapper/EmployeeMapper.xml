@@ -2,7 +2,56 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.lhx.dao.EmployeeDao">
+<mapper namespace="cn.lhx.rbac.dao.EmployeeDao">
+    <!--自定义映射-->
+    <resultMap id="BaseResultMap" type="Employee">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="password" column="password"/>
+    <result property="email" column="email"/>
+    <result property="age" column="age"/>
+    <result property="admin" column="admin"/>
+    <result property="sex" column="sex"/>
+    <result property="birth" column="birth"/>
+    <result property="deptId" column="dept_id"/>
+    <!--员工部门表一对多映射-->
+    <association property="dept" javaType="Department" >
+        <id column="d_id" property="id"/>
+        <result column="d_name" property="name"/>
+        <result column="d_sn" property="sn"/>
+    </association>
+    </resultMap>
 
+    <!--模糊查询 -->
+    <select id="empList" resultMap="BaseResultMap">
+        SELECT e.id,
+        e.name,
+        e.password,
+        e.email,
+        e.age,
+        e.admin,
+        e.dept_id,
+        e.sex,
+        e.birth,
+        d.id   d_id,
+        d.name d_name
+        FROM employee e
+        LEFT JOIN department d ON e.dept_id = d.id ${ew.customSqlSegment}
+
+
+
+
+
+        <!--<where>-->
+        <!--    <if test="keyword!=null and keyword!=''">-->
+        <!--        and (e.name like concat('%',#{keyword},'%') or e.email like concat('%',#{keyword},'%'))-->
+        <!--    </if>-->
+        <!--    <if test="deptId > 0">-->
+        <!--        and e.dept_id = #{deptId}-->
+        <!--    </if>-->
+
+        <!--</where>-->
+
+    </select>
 
 </mapper>

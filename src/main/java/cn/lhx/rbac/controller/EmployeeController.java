@@ -3,6 +3,7 @@ package cn.lhx.rbac.controller;
 import cn.lhx.rbac.base.JsonResult;
 import cn.lhx.rbac.base.Page;
 import cn.lhx.rbac.entity.Employee;
+import cn.lhx.rbac.service.DepartmentService;
 import cn.lhx.rbac.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class EmployeeController {
   private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
   @Resource EmployeeService employeeService;
+  @Resource DepartmentService departmentService;
 
   @GetMapping("/list")
   public String list() {
@@ -31,23 +33,32 @@ public class EmployeeController {
   public String toLogin() {
     return "login";
   }
-
+  @GetMapping("/emp")
+  public String to(){
+    return "/emp/input";
+  }
   /**
    * 查询分页
    *
-   * @param page 分页参数
-   * @param employee 搜索模糊信息
+   * @param page 分页参数 搜索模糊信息
+   * @param
    * @return
    */
   @ResponseBody
   @GetMapping("/select")
-  public JsonResult<Object> select(Page<Employee> page, Employee employee) {
+  public JsonResult<Object> select(Page<Employee> page,Employee employee) {
 
     // 数据必须返回一个List集合
-    Map<String, Object> result = employeeService.listPage(page, employee);
+    Map<String, Object> result = employeeService.listPage(page,employee);
+
     return JsonResult.success(result);
   }
 
+  /**
+   * 删除
+   * @param id 主键id
+   * @return
+   */
   @ResponseBody
   @DeleteMapping("/del/{id}")
   public JsonResult<Object> del(@PathVariable("id") Long id) {
@@ -55,6 +66,11 @@ public class EmployeeController {
     return JsonResult.success(result);
   }
 
+  /**
+   * 批量删除
+   * @param ids
+   * @return
+   */
   @ResponseBody
   @DeleteMapping("/del/emps")
   public JsonResult<Object> delList(@RequestParam("ids") List<Long> ids) {
@@ -62,25 +78,24 @@ public class EmployeeController {
     return JsonResult.success(result);
   }
 
+  /**
+   * 提交
+   * @param employee 提交的实体
+   * @return
+   */
   @ResponseBody
   @RequestMapping("/saveOrUpdate")
   public JsonResult<Object> saveOrUpdate(Employee employee){
     boolean result = employeeService.saveOrUpdate(employee);
     return JsonResult.success(result);
   }
-  @GetMapping("/emp")
-  public String toInput(){
-    return "emp/input";
-  }
-  @ResponseBody
-  @GetMapping("/emp/{id}")
-  public JsonResult<Object> getEmp(@PathVariable Long id){
-    Employee emp = employeeService.getById(id);
-    return JsonResult.success(emp);
-  }
 
-  @GetMapping("/empform")
-  public String to(){
-    return "emp/empform";
-  }
+  // @ResponseBody
+  // @GetMapping("/emp/{id}")
+  // public JsonResult<Object> getEmp(@PathVariable Long id){
+  //   Employee emp = employeeService.getById(id);
+  //   return JsonResult.success(emp);
+  // }
+
+
 }

@@ -28,9 +28,7 @@
                 <div class="layui-input-inline">
                     <select id="deptId" lay-verify="required" lay-search="">>
                         <option value="" selected="">请选择部门</option>
-                        <option value="0">技术部</option>
-                        <option value="1">仓储部</option>
-                        <option value="2">财务部</option>
+
                     </select>
                 </div>
                 <button id="search" type="button" class="layui-btn">查询</button>
@@ -115,8 +113,8 @@
                 [ //表头
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'id', title: 'ID', sort: true, width: 80}
-                    , {field: 'name', title: '用户名', width: 80}
-                    , {field: 'email', title: '邮箱', width: 200, sort: true, totalRow: true}
+                    , {field: 'name', title: '用户名', width: 120}
+                    , {field: 'email', title: '邮箱', width: 180, sort: true, totalRow: true}
                     , {
                     field: 'sex', title: '性别', sort: true, width: 80, templet: function (res) {
                         if (res.sex === 1) {
@@ -135,9 +133,9 @@
                             return '否'
                         }
                     }
-                }
-                    , {field: 'deptId', title: '部门', width: 150}
-                    , {field: 'birth', title: '生日', width: 200}
+                }                                       //d表示获取的data数据
+                    , {field: 'dept', title: '部门', width: 150, templet:'<div>{{d.dept.name}}</div>'}
+                    , {field: 'birth', title: '生日', width: 180}
                     , {fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo', width: 165}
                 ]
             ]
@@ -147,13 +145,15 @@
                 , msgName: 'msg' //规定状态信息的字段名称，默认：msg
                 // ,countName: 'total' //规定数据总数的字段名称，默认：count
                 , dataName: 'data' //规定数据列表的字段名称，默认：data
+
+
             }
             , parseData: function (res) { //res 即为原始返回的数据
                 return {
                     "code": res.code, //解析接口状态
                     "msg": res.msg, //解析提示文本
                     "count": res.data.total, //解析数据长度
-                    "data": res.data.data //解析数据列表
+                    "data": res.data.data, //解析数据列表
                 };
             }
         });
@@ -219,11 +219,21 @@
                     // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2
                     ,title: '编辑用户'
-                    ,content: 'empform'
+                    ,content: '/emp'
                     ,maxmin: true
                     ,area: ['750px', '600px']
                     // ,btn: ['确定', '取消']
                     ,success:function (layero ,index) {
+
+                        $.ajax({
+                            url: /dept/,
+                            type: 'get',
+                            // data: {id: data.id},
+                            dataType: "json",
+                            success: function (result) {
+
+                                console.log(result.data.data[0].id);
+
                         //找到它的子窗口的body
                         var body = layer.getChildFrame('body', index);
                         //为子窗口元素赋值
@@ -244,13 +254,18 @@
                             body.find("#role").slideDown();//显示
                         }
                         body.find("input[name=sex][value="+data.sex+"]").attr("checked",'checked' );
+
+                        for (var i=0;i<result.data.total;i++){
+                        body.find("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
+                        }
                         body.find("option[value="+data.deptId+"]").attr("selected",'selected' );
 
                         //获取新窗口对象  不渲染回显不了按钮
                         var iframeWindow = layero.find('iframe')[0].contentWindow;
                         //重新渲染
                         iframeWindow.layui.form.render();
-
+                            }
+                        });
                     }
 
                 });
@@ -269,8 +284,38 @@
 
             switch (obj.event) {
                 case 'add':
-                    window.location.href = "/emp"
-                    layer.msg('添加');
+                    //添加 模态框
+                    layer.open({
+                        //layer提供了5种层类型。可传入的值有：
+                        // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 2
+                        ,title: '添加用户'
+                        ,content: '/emp'
+                        ,maxmin: true
+                        ,area: ['750px', '600px']
+                        ,success:function (layero ,index) {
+                            $.ajax({
+                                url: /dept/,
+                                type: 'get',
+                                dataType: "json",
+                                success: function (result) {
+                                    //找到它的子窗口的body
+                                    var body = layer.getChildFrame('body', index);
+                                    //为子窗口元素赋值
+                                    console.log(result.data.data[0].id)
+                                    for (var i = 0; i < result.data.total; i++) {
+                                        body.find("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
+                                    }
+                                    body.find("option[value=" + data.deptId + "]").attr("selected", 'selected');
+
+                                    //获取新窗口对象  不渲染回显不了按钮
+                                    var iframeWindow = layero.find('iframe')[0].contentWindow;
+                                    //重新渲染
+                                    iframeWindow.layui.form.render();
+                                }
+                            });
+                        }
+                    });
                     break;
                 case 'update':
                     if (data.length === 0) {
@@ -278,19 +323,66 @@
                     } else if (data.length > 1) {
                         layer.msg('只能同时编辑一个');
                     } else {
-                        layer.alert('编辑 [id]：' + checkStatus.data[0].id);
+                        layer.open({
+                            //layer提供了5种层类型。可传入的值有：
+                            // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                            type: 2
+                            ,title: '编辑用户'
+                            ,content: '/emp'
+                            ,maxmin: true
+                            ,area: ['750px', '600px']
+                            // ,btn: ['确定', '取消']
+                            ,success:function (layero ,index) {
+                                $.ajax({
+                                    url: /dept/,
+                                    type: 'get',
+                                    dataType: "json",
+                                    success: function (result) {
+                                        data = data[0]
+                                        //找到它的子窗口的body
+                                        var body = layer.getChildFrame('body', index);
+                                        //为子窗口元素赋值
+                                        body.find("#id").val(data.id);
+                                        body.find("#name").val(data.name);
+                                        body.find("#birth").val(data.birth);
+                                        body.find("#pass").val(data.password);
+                                        body.find("#repass").val(data.password);
+                                        body.find("#email").val(data.email);
+                                        body.find("#age").val(data.age);
+                                        // body.find("#admin").attr("checked",data.admin===true?'checked':false);
+                                        // 超管回显并移除角色
+                                        if (data.admin) {
+                                            body.find("#admin").attr("checked", 'checked');
+                                            body.find("#role").slideUp();//移除
+                                        } else {
+                                            body.find("#admin").attr("checked", false);
+                                            body.find("#role").slideDown();//显示
+                                        }
+                                        body.find("input[name=sex][value=" + data.sex + "]").attr("checked", 'checked');
+                                        console.log(result.data.data[0].id)
+                                        for (var i=0;i<result.data.total;i++){
+                                            body.find("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
+                                        }
+                                        body.find("option[value="+data.deptId+"]").attr("selected",'selected' );
+
+                                        //获取新窗口对象  不渲染回显不了按钮
+                                        var iframeWindow = layero.find('iframe')[0].contentWindow;
+                                        //重新渲染
+                                        iframeWindow.layui.form.render();
+                                    }
+                                });
+                            }
+
+                        });
                     }
                     break;
                 case 'delete':
                     if (data.length === 0) {
                         layer.msg('请选择一行');
                     } else {
+                        console.log(data)
                         layer.confirm('真的删除所选行么', function (index) {
-                            // console.log(obj)
-                            // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                            // layer.close(index);
-                            //console.log(ids);
-                            // layer.close(index);
+
                             //向服务端发送删除指令
                             $.ajax({
                                 url: '/del/emps',
@@ -299,7 +391,7 @@
                                 traditional: true,//防止深度序列化
                                 data: {
                                     ids: ids,
-                                    // ids:ids.toString(),
+
                                 },
                                 success: function (result) {
                                     if (result) {
@@ -320,6 +412,19 @@
             }
         });
 
+        $.ajax({
+            url: /dept/,
+            type: 'get',
+            dataType: "json",
+            success: function (result) {
+                for (var i = 0; i < result.data.total; i++) {
+               $("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
+                }
+
+                //重新渲染
+               form.render();
+            }
+        });
 
         //将日期直接嵌套在指定容器中
         var dateIns = laydate.render({

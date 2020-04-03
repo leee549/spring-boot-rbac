@@ -1,7 +1,9 @@
 package cn.lhx.rbac.base;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 重写
@@ -9,6 +11,8 @@ import lombok.EqualsAndHashCode;
  * @author lee549
  * @date 2020/3/26 10:43
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> {
@@ -22,7 +26,13 @@ public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.paginati
      * 默认每页10条数据
      */
     private Long limit = 10L;
-
+    // /**
+    //  * 模糊查询条件 keyword：邮箱用户名
+    //  *             deptId
+    //  */
+    // private String keyword;
+    //
+    // private Long deptId;
 
     /************************* 重写 setCurrent 和 setSize ************************************/
 

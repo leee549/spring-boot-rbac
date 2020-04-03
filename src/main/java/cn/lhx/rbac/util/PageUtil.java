@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class PageUtil {
 
-    private static final Integer INITIALCAPCITY = 10;
+    private static final Integer INITIALCAPCITY = 16;
 
     // public static <T> Map<String, Object> toMap(IPage<T> page) {
     //

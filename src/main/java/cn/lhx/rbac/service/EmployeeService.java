@@ -14,14 +14,23 @@ import java.util.Map;
  */
 public interface EmployeeService extends IService<Employee> {
 
+    // /**
+    //  * 分页接口
+    //  *
+    //  * @param page     分页参数
+    //  * @param employee 模糊条件
+    //  * @return 分页结果集
+    //  */
+    // Map<String, Object> listPage(Page<Employee> page, Employee employee);
+
+
     /**
-     * 分页接口
-     *
-     * @param page     分页参数
-     * @param employee 模糊条件
-     * @return 分页结果集
+     * 模糊查询
+     * @param page
+     * @return
      */
-    Map<String, Object> listPage(Page<Employee> page, Employee employee);
+    Map<String, Object> listPage(Page<Employee> page,Employee employee);
+
 
 
 

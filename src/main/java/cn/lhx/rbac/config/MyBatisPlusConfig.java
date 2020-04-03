@@ -18,18 +18,18 @@ import java.util.List;
 @Configuration
 public class MyBatisPlusConfig {
 
-    /**
-     * 分页插件配置
-     *
-     * @return 分页插件对象
-     */
-    @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor interceptor = new PaginationInterceptor();
-        List<ISqlParser> sqlParserList = new ArrayList<>();
-        // 攻击 SQL 阻断解析器、加入解析链
-        sqlParserList.add(new BlockAttackSqlParser());
-        interceptor.setSqlParserList(sqlParserList);
-        return interceptor;
-    }
+  /**
+   * 分页插件配置
+   *
+   * @return 分页插件对象
+   */
+  @Bean
+  public PaginationInterceptor paginationInterceptor() {
+    PaginationInterceptor interceptor = new PaginationInterceptor();
+    List<ISqlParser> sqlParserList = new ArrayList<>();
+    // 攻击 SQL 阻断解析器、加入解析链
+    sqlParserList.add(new BlockAttackSqlParser());
+    interceptor.setSqlParserList(sqlParserList);
+    return interceptor;
+  }
 }
