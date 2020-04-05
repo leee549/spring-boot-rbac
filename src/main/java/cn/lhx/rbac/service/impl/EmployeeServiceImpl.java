@@ -52,8 +52,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeDao, Employee>
       QueryWrapper<Employee> qw = new QueryWrapper<>();
 
       if (StrUtil.isNotBlank(employee.getName())) {
-        qw
-            .like("e.name", employee.getName())
+        qw.like("e.name", employee.getName())
             .or()
             .like("e.email", employee.getEmail());
       }

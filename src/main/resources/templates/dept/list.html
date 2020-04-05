@@ -12,7 +12,7 @@
 <div class="layui-layout layui-layout-admin">
 
     <!--引入topbar-->
-    <div th:replace="commons/bar::topbar(activeUri='emps')"></div>
+    <div th:replace="commons/bar::topbar(activeUri='depts')"></div>
 
     <div class="layui-body">
         <form class="layui-form layui-form-pane" action="">
@@ -20,17 +20,14 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">查询条件:</label>
                     <div class="layui-input-inline">
-                        <input type="text" id="keyword" placeholder="邮箱/用户名" autocomplete="off" class="layui-input">
+                        <input type="text" id="keyword" placeholder="部门名/描述" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="text" id="id" placeholder="Id" autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
-                <label class="layui-form-label">部门：</label>
-                <div class="layui-input-inline">
-                    <select id="deptId" lay-verify="required" lay-search="">>
-                        <option value="" selected="">请选择部门</option>
 
-                    </select>
-                </div>
                 <button id="search" type="button" class="layui-btn">查询</button>
             </div>
 
@@ -98,7 +95,7 @@
         const tableIns = table.render({
             elem: '#test'
             , height: 420
-            , url: '/select' //数据接口
+            , url: '/depts' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度
             , title: '用户表'
             , page: true
@@ -115,31 +112,10 @@
             , cols: [
                 [ //表头
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'id', title: 'ID', sort: true, width: 80}
-                    , {field: 'name', title: '用户名', width: 120}
-                    , {field: 'email', title: '邮箱', width: 180, sort: true, totalRow: true}
-                    , {
-                    field: 'sex', title: '性别', sort: true, width: 80, templet: function (res) {
-                        if (res.sex === 1) {
-                            return '男'
-                        } else if (res.sex===0) {
-                            return '女'
-                        }
-                    }
-                }
-                    , {field: 'age', title: '年龄', width: 80, sort: true, totalRow: true}
-                    , {
-                    field: 'admin', title: '管理员', width: 80, templet: function (res) {
-                        if (res.admin === true) {
-                            return '是'
-                        } else {
-                            return '否'
-                        }
-                    }
-                }                                       //d表示获取的data数据
-                    , {field: 'dept', title: '部门', width: 150, templet:'<div>{{d.dept.name}}</div>'}
-                    , {field: 'birth', title: '生日', width: 180}
-                    , {fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo', width: 165}
+                    , {field: 'id', title: 'ID', sort: true, width: '10%'}
+                    , {field: 'name', title: '部门', width: '20%'}
+                    , {field: 'sn', title: '描述', width: '50%', sort: true, totalRow: true}
+                    , {fixed: 'right', width: '20%', align: 'center', toolbar: '#barDemo', width: 165}
                 ]
             ]
             , response: {
@@ -163,18 +139,16 @@
         // 数据重载
         // 重载
         $('#search').on('click', function () {
-            const keyword = $('#keyword')
-                , deptId = $('#deptId')
+            const keyword = $('#keyword'),
+                  id=$('#id');
             tableIns.reload({
                 page: {
                     curr: 1 //重新从第 1 页开始
                 },
                 where: { //设定异步数据接口的额外参数，任意设
-
+                    id:id.val(),
                     name: keyword.val(),
-                    email: keyword.val(),
-                    deptId: deptId.val()
-
+                    sn:keyword.val()
                 },
 
             });
@@ -195,7 +169,7 @@
                     // layer.close(index);
                     //向服务端发送删除指令
                     $.ajax({
-                        url: /del/ + data.id,
+                        url: '/dept/del/' + data.id,
                         type: 'delete',
                         data: {id: data.id},
                         dataType: "json",
@@ -221,54 +195,28 @@
                     //layer提供了5种层类型。可传入的值有：
                     // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2
-                    ,title: '编辑用户'
-                    ,content: '/emp'
+                    ,title: '编辑部门'
+                    ,content: '/dept/input'
                     ,maxmin: true
                     ,area: ['750px', '600px']
                     // ,btn: ['确定', '取消']
                     ,success:function (layero ,index) {
 
-                        $.ajax({
-                            url: /depts/,
-                            type: 'get',
-                            // data: {id: data.id},
-                            dataType: "json",
-                            success: function (result) {
 
-                                console.log(result.data.data[0].id);
+                                // console.log(result.data.data[0].id);
 
                         //找到它的子窗口的body
                         var body = layer.getChildFrame('body', index);
                         //为子窗口元素赋值
                         body.find("#id").val(data.id);
                         body.find("#name").val(data.name);
-                        body.find("#birth").val(data.birth);
-                        body.find("#pass").val(data.password);
-                        body.find("#repass").val(data.password);
-                        body.find("#email").val(data.email);
-                        body.find("#age").val(data.age);
-                        // body.find("#admin").attr("checked",data.admin===true?'checked':false);
-                        // 超管回显并移除角色
-                        if (data.admin){
-                            body.find("#admin").attr("checked",'checked');
-                            body.find("#role").slideUp();//移除
-                    } else {
-                            body.find("#admin").attr("checked", false);
-                            body.find("#role").slideDown();//显示
-                        }
-                        body.find("input[name=sex][value="+data.sex+"]").attr("checked",'checked' );
-
-                        for (var i=0;i<result.data.total;i++){
-                        body.find("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
-                        }
-                        body.find("option[value="+data.deptId+"]").attr("selected",'selected' );
+                        body.find("#sn").val(data.sn);
 
                         //获取新窗口对象  不渲染回显不了按钮
                         var iframeWindow = layero.find('iframe')[0].contentWindow;
                         //重新渲染
                         iframeWindow.layui.form.render();
-                            }
-                        });
+
                     }
 
                 });
@@ -292,31 +240,11 @@
                         //layer提供了5种层类型。可传入的值有：
                         // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                         type: 2
-                        ,title: '添加用户'
-                        ,content: '/emp'
+                        ,title: '添加部门'
+                        ,content: '/dept/input'
                         ,maxmin: true
                         ,area: ['750px', '600px']
                         ,success:function (layero ,index) {
-                            $.ajax({
-                                url: /depts/,
-                                type: 'get',
-                                dataType: "json",
-                                success: function (result) {
-                                    //找到它的子窗口的body
-                                    var body = layer.getChildFrame('body', index);
-                                    //为子窗口元素赋值
-                                    console.log(result.data.data[0].id)
-                                    for (var i = 0; i < result.data.total; i++) {
-                                        body.find("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
-                                    }
-                                    body.find("option[value=" + data.deptId + "]").attr("selected", 'selected');
-
-                                    //获取新窗口对象  不渲染回显不了按钮
-                                    var iframeWindow = layero.find('iframe')[0].contentWindow;
-                                    //重新渲染
-                                    iframeWindow.layui.form.render();
-                                }
-                            });
                         }
                     });
                     break;
@@ -331,49 +259,25 @@
                             // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                             type: 2
                             ,title: '编辑用户'
-                            ,content: '/emp'
+                            ,content: '/dept/input'
                             ,maxmin: true
                             ,area: ['750px', '600px']
                             // ,btn: ['确定', '取消']
                             ,success:function (layero ,index) {
-                                $.ajax({
-                                    url: /depts/,
-                                    type: 'get',
-                                    dataType: "json",
-                                    success: function (result) {
-                                        data = data[0]
-                                        //找到它的子窗口的body
-                                        var body = layer.getChildFrame('body', index);
-                                        //为子窗口元素赋值
-                                        body.find("#id").val(data.id);
-                                        body.find("#name").val(data.name);
-                                        body.find("#birth").val(data.birth);
-                                        body.find("#pass").val(data.password);
-                                        body.find("#repass").val(data.password);
-                                        body.find("#email").val(data.email);
-                                        body.find("#age").val(data.age);
-                                        // body.find("#admin").attr("checked",data.admin===true?'checked':false);
-                                        // 超管回显并移除角色
-                                        if (data.admin) {
-                                            body.find("#admin").attr("checked", 'checked');
-                                            body.find("#role").slideUp();//移除
-                                        } else {
-                                            body.find("#admin").attr("checked", false);
-                                            body.find("#role").slideDown();//显示
-                                        }
-                                        body.find("input[name=sex][value=" + data.sex + "]").attr("checked", 'checked');
-                                        console.log(result.data.data[0].id)
-                                        for (var i=0;i<result.data.total;i++){
-                                            body.find("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
-                                        }
-                                        body.find("option[value="+data.deptId+"]").attr("selected",'selected' );
 
-                                        //获取新窗口对象  不渲染回显不了按钮
-                                        var iframeWindow = layero.find('iframe')[0].contentWindow;
-                                        //重新渲染
-                                        iframeWindow.layui.form.render();
-                                    }
-                                });
+                            data = data[0]
+                            //找到它的子窗口的body
+                            var body = layer.getChildFrame('body', index);
+                            //为子窗口元素赋值
+                            body.find("#id").val(data.id);
+                            body.find("#name").val(data.name);
+                            body.find("#sn").val(data.sn);
+
+                            //获取新窗口对象  不渲染回显不了按钮
+                            var iframeWindow = layero.find('iframe')[0].contentWindow;
+                            //重新渲染
+                            iframeWindow.layui.form.render();
+
                             }
 
                         });
@@ -388,7 +292,7 @@
 
                             //向服务端发送删除指令
                             $.ajax({
-                                url: '/del/emps',
+                                url: '/dept/del/depts',
                                 type: 'delete',
                                 dataType: "json",
                                 traditional: true,//防止深度序列化
@@ -415,19 +319,20 @@
             }
         });
 
-        $.ajax({
-            url: /depts/,
-            type: 'get',
-            dataType: "json",
-            success: function (result) {
-                for (var i = 0; i < result.data.total; i++) {
-               $("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
-                }
 
-                //重新渲染
-               form.render();
-            }
-        });
+        // $.ajax({
+        //     url: /depts/,
+        //     type: 'get',
+        //     dataType: "json",
+        //     success: function (result) {
+        //         for (var i = 0; i < result.data.total; i++) {
+        //        $("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
+        //         }
+        //
+        //         //重新渲染
+        //        form.render();
+        //     }
+        // });
 
         //将日期直接嵌套在指定容器中
         var dateIns = laydate.render({

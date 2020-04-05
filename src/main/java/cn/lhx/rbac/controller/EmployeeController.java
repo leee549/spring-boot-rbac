@@ -29,12 +29,9 @@ public class EmployeeController {
     return "emp/list";
   }
 
-  @RequestMapping("/toLogin")
-  public String toLogin() {
-    return "login";
-  }
+
   @GetMapping("/emp")
-  public String to(){
+  public String toInput(){
     return "/emp/input";
   }
   /**

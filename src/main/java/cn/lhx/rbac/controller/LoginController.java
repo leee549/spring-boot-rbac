@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class LoginController {
-
+  // @RequestMapping("/toLogin")
+  // public String toLogin() {
+  //   return "login";
+  // }
   @GetMapping("/login")
   public String toLogin(){
     return "login";

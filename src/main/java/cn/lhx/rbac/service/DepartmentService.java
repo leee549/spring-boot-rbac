@@ -12,5 +12,5 @@ import java.util.Map;
  * @date 2020/4/3 12:08
  */
 public interface DepartmentService extends IService<Department> {
-    Map<String,Object> listPage(Page<Department> page);
+    Map<String,Object> listPage(Page<Department> page,Department dept);
 }
