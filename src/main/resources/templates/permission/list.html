@@ -12,7 +12,7 @@
 <div class="layui-layout layui-layout-admin">
 
     <!--引入topbar-->
-    <div th:replace="commons/bar::topbar(activeUri='roles')"></div>
+    <div th:replace="commons/bar::topbar(activeUri='permissions')"></div>
 
     <div class="layui-body">
         <form class="layui-form layui-form-pane" action="">
@@ -20,7 +20,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">查询条件:</label>
                     <div class="layui-input-inline">
-                        <input type="text" id="keyword" placeholder="角色/描述" autocomplete="off" class="layui-input">
+                        <input type="text" id="keyword" placeholder="权限/表达式" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-input-inline">
                         <input type="text" id="id" placeholder="Id" autocomplete="off" class="layui-input">
@@ -95,7 +95,7 @@
         const tableIns = table.render({
             elem: '#test'
             , height: 420
-            , url: '/roles' //数据接口
+            , url: '/perms' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度
             , title: '用户表'
             , page: true
@@ -113,8 +113,8 @@
                 [ //表头
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'id', title: 'ID', sort: true, width: '10%'}
-                    , {field: 'name', title: '角色', width: '20%'}
-                    , {field: 'sn', title: '描述', width: '50%', sort: true, totalRow: true}
+                    , {field: 'name', title: '权限', width: '20%'}
+                    , {field: 'expression', title: '描述', width: '50%', sort: true, totalRow: true}
                     , {fixed: 'right', width: '20%', align: 'center', toolbar: '#barDemo', width: 165}
                 ]
             ]
@@ -148,7 +148,7 @@
                 where: { //设定异步数据接口的额外参数，任意设
                     id:id.val(),
                     name: keyword.val(),
-                    sn:keyword.val()
+                    expression:keyword.val()
                 },
 
             });
@@ -169,7 +169,7 @@
                     // layer.close(index);
                     //向服务端发送删除指令
                     $.ajax({
-                        url: '/role/del/' + data.id,
+                        url: '/perm/del/' + data.id,
                         type: 'delete',
                         data: {id: data.id},
                         dataType: "json",
@@ -196,7 +196,7 @@
                     // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2
                     ,title: '编辑部门'
-                    ,content: '/role/input'
+                    ,content: '/perm/input'
                     ,maxmin: true
                     ,area: ['750px', '600px']
                     // ,btn: ['确定', '取消']
@@ -210,7 +210,7 @@
                         //为子窗口元素赋值
                         body.find("#id").val(data.id);
                         body.find("#name").val(data.name);
-                        body.find("#sn").val(data.sn);
+                        body.find("#expression").val(data.expression);
 
                         //获取新窗口对象  不渲染回显不了按钮
                         var iframeWindow = layero.find('iframe')[0].contentWindow;
@@ -241,7 +241,7 @@
                         // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                         type: 2
                         ,title: '添加部门'
-                        ,content: '/role/input'
+                        ,content: '/perm/input'
                         ,maxmin: true
                         ,area: ['750px', '600px']
                         ,success:function (layero ,index) {
@@ -259,7 +259,7 @@
                             // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                             type: 2
                             ,title: '编辑用户'
-                            ,content: '/role/input'
+                            ,content: '/perm/input'
                             ,maxmin: true
                             ,area: ['750px', '600px']
                             // ,btn: ['确定', '取消']
@@ -271,7 +271,7 @@
                             //为子窗口元素赋值
                             body.find("#id").val(data.id);
                             body.find("#name").val(data.name);
-                            body.find("#sn").val(data.sn);
+                            body.find("#expression").val(data.expression);
 
                             //获取新窗口对象  不渲染回显不了按钮
                             var iframeWindow = layero.find('iframe')[0].contentWindow;
@@ -292,7 +292,7 @@
 
                             //向服务端发送删除指令
                             $.ajax({
-                                url: '/role/del/roles',
+                                url: '/perm/del/perms',
                                 type: 'delete',
                                 dataType: "json",
                                 traditional: true,//防止深度序列化
