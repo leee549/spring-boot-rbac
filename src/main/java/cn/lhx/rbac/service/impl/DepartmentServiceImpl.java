@@ -34,7 +34,8 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentDao, Department
                 .or()
                 .like(Department::getSn,dept.getSn());
         }else if(ObjectUtil.isNotNull(dept.getId())) {
-            qw.eq("id",dept.getId());
+            qw.lambda()
+                    .eq(Department::getId,dept.getId());
         }
         IPage<Department> pageInfo = deptDao.selectPage(page, qw);
 

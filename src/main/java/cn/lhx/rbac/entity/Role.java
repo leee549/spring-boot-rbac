@@ -1,5 +1,8 @@
 package cn.lhx.rbac.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role implements Serializable {
+    @TableId(value = "id",type = IdType.AUTO)
     private Long id;
     private String name;
     private String sn;
+    @TableField(exist = false)
     private List<Permission> permissions;
 }

@@ -58,7 +58,7 @@
                     <label class="layui-icon layui-icon-vercode" ></label>
                     <input type="text" name="vercode" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" >
                     <div class="captcha-img">
-                        <img th:src="@{/captcha}" onclick="this.src=this.src+'?' "id="verImg" width="130px" height="48px"/>
+                        <img src="/captcha" onclick="this.src=this.src+'?' "id="verImg" width="130px" height="48px"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -77,8 +77,17 @@
 <script th:src="@{/js/jquery-module/jquery.particleground.min.js}" charset="utf-8"></script>
 
 <script>
+    // var verKey;
+    // // 获取验证码
+    // $.get('/captcha', function(res) {
+    //     verKey = res.key;
+    //     $('#verImg').attr('src', res.image);
+    // },'json');
+
+
+
     window.onload = function () {
-        if (window.name == "hasLoad") {
+        if (window.name === "hasLoad") {
             location.reload();
             window.name = "";
         } else {

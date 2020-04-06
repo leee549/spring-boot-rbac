@@ -47,7 +47,7 @@ public class DepartmentController {
     }
 
     /**
-     *
+     *更新/保存
      * @param department 部门
      * @return
      */
