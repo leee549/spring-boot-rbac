@@ -1,6 +1,8 @@
 package cn.lhx.rbac.util;
 
 import cn.hutool.core.lang.Dict;
+import cn.lhx.rbac.entity.Department;
+import cn.lhx.rbac.entity.Role;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Builder;
 
@@ -34,5 +36,14 @@ public class PageUtil {
         return map;
 
     }
+    // public static <T> Map<String, Object> toMap() {
+    //     Map<String, Object> map = new HashMap<>(INITIALCAPCITY);
+    //     map.put("data", page.getRecords());
+    //     map.put("total", page.getTotal());
+    //     return map;
+    //
+    // }
+
+
 
 }

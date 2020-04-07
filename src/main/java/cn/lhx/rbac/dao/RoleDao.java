@@ -4,6 +4,9 @@ import cn.lhx.rbac.base.Page;
 import cn.lhx.rbac.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 /**
  * @author lee549
@@ -11,4 +14,5 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  */
 public interface RoleDao extends BaseMapper<Role> {
 
+    List<Role> selectByEmpId( Long id);
 }

@@ -38,10 +38,6 @@
         FROM employee e
         LEFT JOIN department d ON e.dept_id = d.id ${ew.customSqlSegment}
 
-
-
-
-
         <!--<where>-->
         <!--    <if test="keyword!=null and keyword!=''">-->
         <!--        and (e.name like concat('%',#{keyword},'%') or e.email like concat('%',#{keyword},'%'))-->
@@ -53,5 +49,15 @@
         <!--</where>-->
 
     </select>
+    <!--插入新的联系-->
+    <insert id="insertRelation">
+        insert into employee_role(employee_id, role_id) value(#{employeeId},#{roleId});
+    </insert>
+
+    <!--删除旧的员工-角色关系 -->
+    <delete id="deleteRelation">
+        delete from employee_role
+        where employee_id=#{employeeId}
+    </delete>
 
 </mapper>

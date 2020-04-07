@@ -24,4 +24,8 @@ public interface EmployeeDao extends BaseMapper<Employee>{
      * @return
      */
     IPage<Employee> empList(Page<Employee> page,@Param(Constants.WRAPPER) Wrapper<Employee> queryWrapper);
+
+    void insertRelation(@Param("employeeId") Long employeeId, @Param("roleId") Long ids);
+
+    void deleteRelation(@Param("employeeId") Long employeeId);
 }

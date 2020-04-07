@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +23,12 @@ import java.util.Map;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleService {
     @Resource RoleDao roleDao;
+
+    @Override
+    public List<Role> getByEmpId(Long id) {
+        return roleDao.selectByEmpId(id);
+    }
+
     @Override
     public Map<String, Object> listPage(Page<Role> page, Role role) {
         QueryWrapper<Role> qw = new QueryWrapper<>();
