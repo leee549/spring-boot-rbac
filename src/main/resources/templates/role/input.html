@@ -31,6 +31,15 @@
                     <input type="text" id="sn" name="sn" lay-reqtext="描述为必填项" lay-verify="required" autocomplete="off" placeholder="请输入描述" class="layui-input">
                 </div>
             </div>
+            <div id="perms" class="layui-form-item">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                    <legend>权限:</legend>
+                </fieldset>
+                <div class="layui-form-item layui-form-text">
+                    <!--<label class="layui-form-label"></label>-->
+                    <div id="test3" class="demo-transfer"></div>
+                </div>
+            </div>
 
 
             <div class="layui-form-item">
@@ -62,9 +71,18 @@
 
         //监听提交
         form.on('submit(demo1)', function(data){
+            //角色信息
+            var getData = transfer.getData('transfer');
+            const ids = []
+            for (var x = 0; x < getData.length; x++) {
+                ids.push(getData[x].value)
+            }
+            //把右侧ids加入data
+            data.field.ids = ids
             $.ajax({
                 url:'/role/saveOrUpdate',
                 type:'post',
+                traditional: true,//防止深度序列化
                 data:data.field,
                 datatype:"json",
                 success: function (result) {
@@ -85,6 +103,50 @@
             });
             return false;
         });
+
+        //先查全部，再根据id查
+        $.ajax({
+            url: '/role/input',
+            type: 'get',
+            datatype: JSON,
+            success: function (result) {
+                // 根据id获取右侧角色 加入到value
+                $.ajax({
+                    url: '/role/getPerms',
+                    type: 'get',
+                    data: {id: $('#id').val()},
+                    dataType: "json",
+                    success: function (res) {
+                        var value = [];
+                        for (let a = 0; a < res.data.rolePerms.length; a++) {
+                            value.push(res.data.rolePerms[a].id)
+                        }
+                        //角色列表
+                        transfer.render({
+                            elem: '#test3'
+                            , data: result.data.perms
+                            , id: 'transfer'
+                            , title: ['可设角色', '已有角色']
+                            , showSearch: true
+                            , height: 210 //定义高度
+                            , value: value
+                            , parseData: function (res) {
+                                //根据返回数据格式进行解析
+                                return {
+                                    "value": res.id,//数据值
+                                    "title": res.name, //数据标题
+                                }
+                            }
+                        });
+
+                    }
+                });
+                layui.form.render();
+            }
+        });
+
+
+
         //自定义验证规则
         form.verify({
             title: function(value){

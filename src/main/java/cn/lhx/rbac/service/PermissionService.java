@@ -5,6 +5,7 @@ import cn.lhx.rbac.entity.Permission;
 import cn.lhx.rbac.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +20,6 @@ public interface PermissionService extends IService<Permission> {
      * @return
      */
     Map<String, Object> listPage(Page<Permission> page, Permission permission);
+
+    List<Permission> getByRoleId(Long id);
 }

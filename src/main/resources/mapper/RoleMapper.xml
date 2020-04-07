@@ -19,5 +19,17 @@
 
     </select>
 
+    <!-- 删除旧的角色-权限联系 -->
+    <delete id="deleteRelation">
+        delete
+        from role_permission
+        where role_id = #{roleId}
+    </delete>
+    <!--新增新的角色-权限联系-->
+    <insert id="insertRelation">
+        insert into role_permission (role_id, permission_id)
+            value (#{roleId},#{permissionId})
+    </insert>
+
 
 </mapper>

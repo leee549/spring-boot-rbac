@@ -195,16 +195,12 @@
                     //layer提供了5种层类型。可传入的值有：
                     // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2
-                    ,title: '编辑部门'
-                    ,content: '/role/input'
+                    ,title: '编辑角色'
+                    ,content: '/role'
                     ,maxmin: true
                     ,area: ['750px', '600px']
                     // ,btn: ['确定', '取消']
                     ,success:function (layero ,index) {
-
-
-                                // console.log(result.data.data[0].id);
-
                         //找到它的子窗口的body
                         var body = layer.getChildFrame('body', index);
                         //为子窗口元素赋值
@@ -241,7 +237,7 @@
                         // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                         type: 2
                         ,title: '添加部门'
-                        ,content: '/role/input'
+                        ,content: '/role'
                         ,maxmin: true
                         ,area: ['750px', '600px']
                         ,success:function (layero ,index) {
@@ -258,8 +254,8 @@
                             //layer提供了5种层类型。可传入的值有：
                             // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                             type: 2
-                            ,title: '编辑用户'
-                            ,content: '/role/input'
+                            ,title: '编辑角色'
+                            ,content: '/role'
                             ,maxmin: true
                             ,area: ['750px', '600px']
                             // ,btn: ['确定', '取消']
@@ -320,19 +316,7 @@
         });
 
 
-        // $.ajax({
-        //     url: /depts/,
-        //     type: 'get',
-        //     dataType: "json",
-        //     success: function (result) {
-        //         for (var i = 0; i < result.data.total; i++) {
-        //        $("#deptId").append(new Option(result.data.data[i].name, result.data.data[i].id));
-        //         }
-        //
-        //         //重新渲染
-        //        form.render();
-        //     }
-        // });
+
 
         //将日期直接嵌套在指定容器中
         var dateIns = laydate.render({

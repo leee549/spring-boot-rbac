@@ -18,5 +18,5 @@ public interface RoleService extends IService<Role> {
 
     List<Role> getByEmpId(Long id);
 
-
+    void saveOrUpdate(Role role, Long[] ids);
 }

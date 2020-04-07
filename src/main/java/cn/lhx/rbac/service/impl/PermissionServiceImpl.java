@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +25,11 @@ import java.util.Map;
 public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission>
     implements PermissionService {
   @Resource PermissionDao permissionDao;
+
+  @Override
+  public List<Permission> getByRoleId(Long id) {
+    return permissionDao.getByRoleId(id);
+  }
 
   @Override
   public Map<String, Object> listPage(Page<Permission> page, Permission permission) {

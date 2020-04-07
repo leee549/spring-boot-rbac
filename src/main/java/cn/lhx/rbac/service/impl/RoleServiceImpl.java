@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.lhx.rbac.base.Page;
 import cn.lhx.rbac.dao.RoleDao;
+import cn.lhx.rbac.entity.Employee;
 import cn.lhx.rbac.entity.Role;
 import cn.lhx.rbac.service.RoleService;
 import cn.lhx.rbac.util.PageUtil;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * @author lee549
@@ -22,26 +24,32 @@ import java.util.Map;
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleService {
-    @Resource RoleDao roleDao;
+  @Resource RoleDao roleDao;
 
-    @Override
-    public List<Role> getByEmpId(Long id) {
-        return roleDao.selectByEmpId(id);
-    }
+  @Override
+  public List<Role> getByEmpId(Long id) {
+    return roleDao.selectByEmpId(id);
+  }
 
-    @Override
-    public Map<String, Object> listPage(Page<Role> page, Role role) {
-        QueryWrapper<Role> qw = new QueryWrapper<>();
-        if (StrUtil.isNotBlank(role.getName())){
-            qw.lambda()
-                    .like(Role::getName,role.getName())
-                    .or()
-                    .like(Role::getSn,role.getSn());
-        }else if (ObjectUtil.isNotNull(role.getId())){
-            qw.lambda()
-                    .eq(Role::getId,role.getId());
-        }
-        IPage<Role> pageInfo = roleDao.selectPage(page, qw);
-        return PageUtil.toMap(pageInfo);
+  @Override
+  public Map<String, Object> listPage(Page<Role> page, Role role) {
+    QueryWrapper<Role> qw = new QueryWrapper<>();
+    if (StrUtil.isNotBlank(role.getName())) {
+      qw.lambda().like(Role::getName, role.getName()).or().like(Role::getSn, role.getSn());
+    } else if (ObjectUtil.isNotNull(role.getId())) {
+      qw.lambda().eq(Role::getId, role.getId());
     }
+    IPage<Role> pageInfo = roleDao.selectPage(page, qw);
+    return PageUtil.toMap(pageInfo);
+  }
+
+  @Override
+  public void saveOrUpdate(Role role, Long[] ids) {
+    this.saveOrUpdate(role);
+    // 删除旧联系
+    roleDao.deleteRelation(role.getId());
+    if (ids != null) {
+      Stream.of(ids).forEach(e -> roleDao.insertRelation(role.getId(), e));
+    }
+  }
 }
