@@ -1,6 +1,7 @@
 package cn.lhx.rbac.service;
 
 import cn.lhx.rbac.base.Page;
+import cn.lhx.rbac.entity.Permission;
 import cn.lhx.rbac.entity.Role;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lee549
@@ -19,4 +21,8 @@ public interface RoleService extends IService<Role> {
     List<Role> getByEmpId(Long id);
 
     void saveOrUpdate(Role role, Long[] ids);
+
+    List<Permission> getByRoleId(Long id);
+
+    Set<String> querySnByEmployeeId(Long id);
 }

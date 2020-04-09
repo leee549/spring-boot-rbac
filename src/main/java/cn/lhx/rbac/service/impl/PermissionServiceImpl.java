@@ -14,8 +14,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lee549
@@ -27,8 +29,16 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionDao, Permission
   @Resource PermissionDao permissionDao;
 
   @Override
-  public List<Permission> getByRoleId(Long id) {
-    return permissionDao.getByRoleId(id);
+  public Set<String> queryAllExpression() {
+    List<Permission> perms = this.list();
+    Set<String> set = new HashSet<>();
+    perms.forEach(perm -> set.add(perm.getExpression()));
+    return set;
+  }
+
+  @Override
+  public Set<String> queryExpressionByEmployeeId(Long id) {
+    return permissionDao.selectByEmployeeId(id);
   }
 
   @Override

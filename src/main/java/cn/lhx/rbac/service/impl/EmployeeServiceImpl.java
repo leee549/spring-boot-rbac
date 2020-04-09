@@ -71,6 +71,13 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeDao, Employee>
   }
 
   @Override
+  public Employee selectByName(String username) {
+    QueryWrapper<Employee> qw = new QueryWrapper<>();
+    qw.eq("name",username);
+    return employeeDao.selectOne(qw);
+  }
+
+  @Override
   public void saveOrUpdate(Employee employee, Long[] ids) {
     this.saveOrUpdate(employee);
     // 没勾选管理员才操作

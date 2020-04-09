@@ -4,8 +4,14 @@ import cn.lhx.rbac.base.JsonResult;
 import cn.lhx.rbac.entity.Employee;
 import com.wf.captcha.GifCaptcha;
 import com.wf.captcha.utils.CaptchaUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,20 +27,29 @@ public class LoginController {
   //   return "login";
   // }
   @GetMapping("/login")
-  public String toLogin(){
+  public String toLogin() {
     return "login";
   }
+
   @ResponseBody
   @PostMapping("/auth/login")
-  public JsonResult<Object> login(String vercode, Employee employee, HttpServletRequest request){
-    System.out.println(request.getSession().getAttribute("captcha"));
-    System.out.println("输入的验证码："+vercode);
-    if (!CaptchaUtil.ver(vercode,request)){
+  public JsonResult<Object> login(String vercode, Employee employee, HttpServletRequest request) {
+    if (!CaptchaUtil.ver(vercode, request)) {
       // 清除session中的验证码
       CaptchaUtil.clear(request);
       return JsonResult.error("输入的验证不正确！");
     }
-  return JsonResult.success();
+    Subject subject = SecurityUtils.getSubject();
+    UsernamePasswordToken token =
+        new UsernamePasswordToken(employee.getName(), employee.getPassword(), false);
+    subject.login(token);
+    return JsonResult.success();
+  }
+
+  @RequestMapping("/logout")
+  public String logout() {
+    SecurityUtils.getSubject().logout();
+    return "redirect:/login";
   }
 
   @ResponseBody

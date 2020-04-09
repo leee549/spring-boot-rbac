@@ -100,7 +100,7 @@ public class RoleController {
   @GetMapping("role/getPerms")
   public JsonResult<Object> getPerms(@RequestParam("id") Long id){
     Map<String, Object> result = new HashMap<>(3);
-    List<Permission> rolePerms = permService.getByRoleId(id);
+    List<Permission> rolePerms = roleService.getByRoleId(id);
     result.put("rolePerms", rolePerms);
     return JsonResult.success(result);
   }

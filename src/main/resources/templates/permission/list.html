@@ -6,6 +6,7 @@
     <title>基于springboot 的权限管理后台</title>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}">
     <script th:src="@{/static/js/jquery/jquery.min.js}"></script>
+    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
     <script th:src="@{/static/layui/layui.js}"></script>
 </head>
 <body class="layui-layout-body">
@@ -34,7 +35,7 @@
         </form>
 
         <!--表格-->
-        <table  class="layui-hide" id="test" lay-filter="test"></table>
+        <table class="layui-hide" id="test" lay-filter="test"></table>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -78,7 +79,6 @@
 <script>
 
 
-
     layui.use(['table', 'element', 'laydate', "layer", 'upload', 'form'], function () {
 
         var table = layui.table  //table表格
@@ -99,12 +99,12 @@
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度
             , title: '用户表'
             , page: true
-            , done: function (res,curr) {
+            , done: function (res, curr) {
                 var beforeCurr = curr; // 获得当前页码
                 var dataLength = res.data.length; // 获得当前页的记录数
                 var count = res.count; // 获得总记录数
-                if(dataLength === 0 && count !== 0){ //如果当前页的记录数为0并且总记录数不为0
-                    table.reload('test', {page: {curr:beforeCurr-1}})
+                if (dataLength === 0 && count !== 0) { //如果当前页的记录数为0并且总记录数不为0
+                    table.reload('test', {page: {curr: beforeCurr - 1}})
                 }
             }
             , toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -114,7 +114,7 @@
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'id', title: 'ID', sort: true, width: '10%'}
                     , {field: 'name', title: '权限', width: '20%'}
-                    , {field: 'expression', title: '描述', width: '50%', sort: true, totalRow: true}
+                    , {field: 'expression', title: '表达式', width: '50%', sort: true, totalRow: true}
                     , {fixed: 'right', width: '20%', align: 'center', toolbar: '#barDemo', width: 165}
                 ]
             ]
@@ -140,15 +140,15 @@
         // 重载
         $('#search').on('click', function () {
             const keyword = $('#keyword'),
-                  id=$('#id');
+                id = $('#id');
             tableIns.reload({
                 page: {
                     curr: 1 //重新从第 1 页开始
                 },
                 where: { //设定异步数据接口的额外参数，任意设
-                    id:id.val(),
+                    id: id.val(),
                     name: keyword.val(),
-                    expression:keyword.val()
+                    expression: keyword.val()
                 },
 
             });
@@ -195,15 +195,15 @@
                     //layer提供了5种层类型。可传入的值有：
                     // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2
-                    ,title: '编辑部门'
-                    ,content: '/perm/input'
-                    ,maxmin: true
-                    ,area: ['750px', '600px']
+                    , title: '编辑权限'
+                    , content: '/perm/input'
+                    , maxmin: true
+                    , area: ['750px', '600px']
                     // ,btn: ['确定', '取消']
-                    ,success:function (layero ,index) {
+                    , success: function (layero, index) {
 
 
-                                // console.log(result.data.data[0].id);
+                        // console.log(result.data.data[0].id);
 
                         //找到它的子窗口的body
                         var body = layer.getChildFrame('body', index);
@@ -240,11 +240,11 @@
                         //layer提供了5种层类型。可传入的值有：
                         // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                         type: 2
-                        ,title: '添加部门'
-                        ,content: '/perm/input'
-                        ,maxmin: true
-                        ,area: ['750px', '600px']
-                        ,success:function (layero ,index) {
+                        , title: '添加权限'
+                        , content: '/perm/input'
+                        , maxmin: true
+                        , area: ['750px', '600px']
+                        , success: function (layero, index) {
                         }
                     });
                     break;
@@ -258,25 +258,25 @@
                             //layer提供了5种层类型。可传入的值有：
                             // 0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                             type: 2
-                            ,title: '编辑用户'
-                            ,content: '/perm/input'
-                            ,maxmin: true
-                            ,area: ['750px', '600px']
+                            , title: '编辑权限'
+                            , content: '/perm/input'
+                            , maxmin: true
+                            , area: ['750px', '600px']
                             // ,btn: ['确定', '取消']
-                            ,success:function (layero ,index) {
+                            , success: function (layero, index) {
 
-                            data = data[0]
-                            //找到它的子窗口的body
-                            var body = layer.getChildFrame('body', index);
-                            //为子窗口元素赋值
-                            body.find("#id").val(data.id);
-                            body.find("#name").val(data.name);
-                            body.find("#expression").val(data.expression);
+                                data = data[0]
+                                //找到它的子窗口的body
+                                var body = layer.getChildFrame('body', index);
+                                //为子窗口元素赋值
+                                body.find("#id").val(data.id);
+                                body.find("#name").val(data.name);
+                                body.find("#expression").val(data.expression);
 
-                            //获取新窗口对象  不渲染回显不了按钮
-                            var iframeWindow = layero.find('iframe')[0].contentWindow;
-                            //重新渲染
-                            iframeWindow.layui.form.render();
+                                //获取新窗口对象  不渲染回显不了按钮
+                                var iframeWindow = layero.find('iframe')[0].contentWindow;
+                                //重新渲染
+                                iframeWindow.layui.form.render();
 
                             }
 

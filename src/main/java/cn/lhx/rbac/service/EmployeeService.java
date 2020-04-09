@@ -34,4 +34,6 @@ public interface EmployeeService extends IService<Employee> {
   void deleteRelation(Long id);
 
   void saveOrUpdate(Employee entity, Long[] ids);
+
+    Employee selectByName(String username);
 }

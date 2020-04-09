@@ -19,40 +19,40 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">用户名:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>用户名:</label>
                 <div class="layui-input-block">
                     <input type="text" id="name" name="name" lay-reqtext="用户名是必填项，岂能为空？" lay-verify="required"
                            autocomplete="off" placeholder="请输入用户名" class="layui-input">
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">密码:</label>
-                <div class="layui-input-inline">
-                    <input type="password" id="pass" name="password" placeholder="请输入密码" lay-verify="pass"
-                           autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">请务必填写密码</div>
-            </div>
+            <!--<div class="layui-form-item">-->
+            <!--    <label class="layui-form-label"><span style="color: red">*</span>密码:</label>-->
+            <!--    <div class="layui-input-inline">-->
+            <!--        <input type="password" id="pass" name="password" placeholder="请输入密码" lay-verify="pass"-->
+            <!--               autocomplete="off" class="layui-input">-->
+            <!--    </div>-->
+            <!--    <div class="layui-form-mid layui-word-aux">请务必填写密码</div>-->
+            <!--</div>-->
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">确认密码:</label>
-                <div class="layui-input-inline">
-                    <input type="password" id="repass" name="repassword" placeholder="请再次输入密码" lay-verify="repass"
-                           autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">再次确认密码</div>
-            </div>
+            <!--<div class="layui-form-item">-->
+            <!--    <label class="layui-form-label"><span style="color: red">*</span>确认密码:</label>-->
+            <!--    <div class="layui-input-inline">-->
+            <!--        <input type="password" id="repass" name="repassword" placeholder="请再次输入密码" lay-verify="repass"-->
+            <!--               autocomplete="off" class="layui-input">-->
+            <!--    </div>-->
+            <!--    <div class="layui-form-mid layui-word-aux">再次确认密码</div>-->
+            <!--</div>-->
 
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">出生日期:</label>
+                    <label class="layui-form-label"><span style="color: red">*</span>出生日期:</label>
                     <div class="layui-input-block">
                         <input type="text" name="birth" id="birth" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">邮箱:</label>
+                    <label class="layui-form-label"><span style="color: red">*</span>邮箱:</label>
                     <div class="layui-input-inline">
                         <input type="text" name="email" id="email" lay-verify="" placeholder="请输入邮箱" autocomplete="off"
                                class="layui-input">
@@ -63,7 +63,7 @@
 
 
             <div class="layui-form-item">
-                <label class="layui-form-label">部门:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>部门:</label>
                 <div class="layui-input-block">
                     <select name="deptId" id="deptId" lay-filter="dept">
                         <option value=""></option>
@@ -74,7 +74,7 @@
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">年龄:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>年龄:</label>
                 <div class="layui-input-inline">
                     <input type="text" id="age" name="age" placeholder="请输入年龄" lay-verify="repass" autocomplete="off"
                            class="layui-input">
@@ -83,7 +83,7 @@
 
 
             <div class="layui-form-item" pane="">
-                <label class="layui-form-label">管理员:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>管理员:</label>
                 <div class="layui-input-block">
                     <input type="checkbox" id="admin" name="admin" lay-skin="switch" lay-text="开|关"
                            lay-filter="switchTest" title="开关">
@@ -91,7 +91,7 @@
             </div>
 
             <div class="layui-form-item" pane="">
-                <label class="layui-form-label">性别:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>性别:</label>
                 <div class="layui-input-block">
                     <input class="sex" type="radio" checked="" name="sex" value="1" title="男">
                     <input class="sex" type="radio" name="sex" value="0" title="女">
@@ -196,21 +196,21 @@
 
 
         //自定义验证规则
-        form.verify({
-            title: function (value) {
-                if (value.length < 5) {
-                    return '标题至少得5个字符啊';
-                }
-            }
-            // ,pass: [/^[\S]{6,12}$/,'密码必须6到12位，且不能出现空格' ]
-            , pass: [/^[\S]{1,12}$/, '密码必须1到12位，且不能出现空格']
-            , repass: function () {
-                if ($('#pass').val() != $('#repass').val()) {
-                    return '两次密码不一致';
-                }
-            }
-
-        });
+        // form.verify({
+        //     title: function (value) {
+        //         if (value.length < 5) {
+        //             return '标题至少得5个字符啊';
+        //         }
+        //     }
+        //     // ,pass: [/^[\S]{6,12}$/,'密码必须6到12位，且不能出现空格' ]
+        //     , pass: [/^[\S]{1,12}$/, '密码必须1到12位，且不能出现空格']
+        //     , repass: function () {
+        //         if ($('#pass').val() != $('#repass').val()) {
+        //             return '两次密码不一致';
+        //         }
+        //     }
+        //
+        // });
 
 
         $.ajax({

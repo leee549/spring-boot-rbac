@@ -8,6 +8,7 @@ import cn.lhx.rbac.entity.Role;
 import cn.lhx.rbac.service.DepartmentService;
 import cn.lhx.rbac.service.EmployeeService;
 import cn.lhx.rbac.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,11 +30,13 @@ public class EmployeeController {
   @Resource DepartmentService departmentService;
   @Resource RoleService roleService;
 
+  @RequiresPermissions("employee:list")
   @GetMapping("emp/list")
   public String list() {
     return "emp/list";
   }
 
+  @RequiresPermissions("employee:input")
   @GetMapping("/emp")
   public String toInput() {
     return "/emp/input";
@@ -45,6 +48,7 @@ public class EmployeeController {
    * @param
    * @return
    */
+  @RequiresPermissions("employee:list")
   @ResponseBody
   @GetMapping("/select")
   public JsonResult<Object> select(Page<Employee> page, Employee employee) {
@@ -54,6 +58,7 @@ public class EmployeeController {
     return JsonResult.success(result);
   }
 
+  @RequiresPermissions("employee:input")
   @ResponseBody
   @GetMapping("/emp/input")
   public JsonResult<Object> input() {
@@ -66,6 +71,7 @@ public class EmployeeController {
     return JsonResult.success(result);
   }
 
+  @RequiresPermissions("employee:input")
   @ResponseBody
   @GetMapping("/emp/getRoles")
   public JsonResult<Object> getRoles(@RequestParam("id") Long id) {
@@ -82,6 +88,7 @@ public class EmployeeController {
    * @param id 主键id
    * @return
    */
+  @RequiresPermissions("employee:delete")
   @ResponseBody
   @DeleteMapping("/del/")
   public JsonResult<Object> del(@RequestParam("id") Long id) {
@@ -95,6 +102,7 @@ public class EmployeeController {
    * @param ids
    * @return
    */
+  @RequiresPermissions("employee:delete")
   @ResponseBody
   @DeleteMapping("/del/emps")
   public JsonResult<Object> delList(@RequestParam("ids") List<Long> ids) {
@@ -108,6 +116,7 @@ public class EmployeeController {
    * @param employee 提交的实体
    * @return
    */
+  @RequiresPermissions("employee:saveOrUpdate")
   @ResponseBody
   @RequestMapping("/saveOrUpdate")
   public JsonResult<Object> saveOrUpdate(

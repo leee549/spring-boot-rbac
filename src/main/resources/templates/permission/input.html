@@ -15,20 +15,22 @@
         <form class="layui-form layui-form-pane" style="margin-right: 50px" action="" lay-filter="example">
             <!--判断是否更新-->
             <div class="layui-form-item">
-                    <input type="hidden" id="id" name="id"  autocomplete="off"  class="layui-input">
+                <input type="hidden" id="id" name="id" autocomplete="off" class="layui-input">
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">角色:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>权限:</label>
                 <div class="layui-input-block">
-                    <input type="text" id="name" name="name" lay-reqtext="部门名是必填项，岂能为空？" lay-verify="required" autocomplete="off" placeholder="请输入角色名" class="layui-input">
+                    <input type="text" id="name" name="name" lay-reqtext="权限名是必填项，岂能为空？" lay-verify="required"
+                           autocomplete="off" placeholder="请输入权限名" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">表达式:</label>
+                <label class="layui-form-label"><span style="color: red">*</span>表达式:</label>
                 <div class="layui-input-block">
-                    <input type="text" id="expression" name="expression" lay-reqtext="描述为必填项" lay-verify="required" autocomplete="off" placeholder="请输入描述" class="layui-input">
+                    <input type="text" id="expression" name="expression" lay-reqtext="描述为必填项" lay-verify="required"
+                           autocomplete="off" placeholder="请输入描述" class="layui-input">
                 </div>
             </div>
 
@@ -43,12 +45,11 @@
     </div>
 
 
-
 </div>
 
 
 <script>
-    layui.use(['table', 'element', 'laydate', "layer", 'upload','transfer','util', 'form'], function () {
+    layui.use(['table', 'element', 'laydate', "layer", 'upload', 'transfer', 'util', 'form'], function () {
 
         var table = layui.table  //table表格
             , laydate = layui.laydate  //日期
@@ -56,29 +57,29 @@
             , element = layui.element //动态效果
             , form = layui.form        //表单
             , layer = layui.layer //弹层
-            ,transfer=layui.transfer //角色
+            , transfer = layui.transfer //角色
             , $ = layui.$
 
 
         //监听提交
-        form.on('submit(demo1)', function(data){
+        form.on('submit(demo1)', function (data) {
             $.ajax({
-                url:'/perm/saveOrUpdate',
-                type:'post',
-                data:data.field,
-                datatype:"json",
+                url: '/perm/saveOrUpdate',
+                type: 'post',
+                data: data.field,
+                datatype: "json",
                 success: function (result) {
                     if (result) {
-                              // 父级页面表格
+                        // 父级页面表格
                         parent.layui.table.reload('test');
-                        layer.msg("提交成功",{icon:1,time:1000,shade:0.4},function() {
+                        layer.msg("提交成功", {icon: 1, time: 1000, shade: 0.4}, function () {
                             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                             parent.layer.close(index); //再执行关闭
+                            parent.layer.close(index); //再执行关闭
 
                         });
 
                     } else {
-                        layer.msg("提交失败",{icon:1,time:1500,shade:0.4},function() {
+                        layer.msg("提交失败", {icon: 1, time: 1500, shade: 0.4}, function () {
                         });
                     }
                 }
@@ -87,28 +88,22 @@
         });
         //自定义验证规则
         form.verify({
-            title: function(value){
-                if(value.length < 5){
+            title: function (value) {
+                if (value.length < 5) {
                     return '标题至少得5个字符啊';
                 }
             }
             // ,pass: [/^[\S]{6,12}$/,'密码必须6到12位，且不能出现空格' ]
-            ,pass: [/^[\S]{1,12}$/,'密码必须1到12位，且不能出现空格' ]
-            ,repass:function () {
-                if ($('#pass').val()!=$('#repass').val()){
+            , pass: [/^[\S]{1,12}$/, '密码必须1到12位，且不能出现空格']
+            , repass: function () {
+                if ($('#pass').val() != $('#repass').val()) {
                     return '两次密码不一致';
                 }
             }
-            ,content: function(value){
+            , content: function (value) {
                 layedit.sync(editIndex);
             }
         });
-
-
-
-
-
-
 
 
     });

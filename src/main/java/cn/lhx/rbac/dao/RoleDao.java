@@ -1,13 +1,12 @@
 package cn.lhx.rbac.dao;
 
-import cn.lhx.rbac.base.Page;
+import cn.lhx.rbac.entity.Permission;
 import cn.lhx.rbac.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lee549
@@ -20,4 +19,8 @@ public interface RoleDao extends BaseMapper<Role> {
     void deleteRelation(@Param("roleId")Long id);
 
     void insertRelation(@Param("roleId")Long id, @Param("permissionId") Long permissionId);
+
+    List<Permission> getByRoleId(Long id);
+
+    Set<String> querySnByEmployeeId(Long id);
 }

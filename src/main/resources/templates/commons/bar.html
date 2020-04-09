@@ -5,116 +5,120 @@
     <title>Title</title>
 </head>
 <body>
-    <nav th:fragment="topbar">
-        <div class="layui-header" >
-            <div class="layui-logo">后台权限管理</div>
-            <!-- 头部区域（可配合layui已有的水平导航） -->
-            <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="">控制台</a></li>
-                <li class="layui-nav-item"><a href="">商品管理</a></li>
-                <li class="layui-nav-item"><a href="">用户</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">其它系统</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="">邮件管理</a></dd>
-                        <dd><a href="">消息管理</a></dd>
-                        <dd><a href="">授权管理</a></dd>
+<nav th:fragment="topbar">
+    <div class="layui-header">
+        <div class="layui-logo">后台权限管理</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">商品管理</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img th:href="@{/static/favicon.ico}" class="layui-nav-img">
+                    admin
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a th:href="@{/logout}">退了</a></li>
+        </ul>
+
+    </div>
+
+
+    <!--侧边栏-->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;"><i class="layui-icon layui-icon-set"></i><cite
+                            style="margin-left: 10px">后台管理</cite></a>
+                    <dl class="layui-nav-child ">
+                        <dd class="" th:class="${activeUri=='emps'?'layui-this':''}"><a href="/emp/list">员工列表</a></dd>
+                        <dd class="" th:class="${activeUri=='depts'?'layui-this':''}"><a href="/dept/list">部门列表</a></dd>
+                        <dd class="" th:class="${activeUri=='roles'?'layui-this':''}"><a
+                                href="/role/list"><span>角色管理</span></a></dd>
+                        <dd class="" th:class="${activeUri=='permissions'?'layui-this':''}"><a href="/perm/list"><span>权限管理</span></a>
+                        </dd>
+
                     </dl>
                 </li>
-            </ul>
-            <ul class="layui-nav layui-layout-right">
-                <li class="layui-nav-item">
-                    <a href="javascript:;">
-                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                        admin
-                    </a>
+                <li class="layui-nav-item ">
+                    <a href="javascript:;" class=""><i class="layui-icon layui-icon-component"></i><cite
+                            style="margin-left: 10px">解决方案</cite></a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">安全设置</a></dd>
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">退了</a></li>
+                <li class="layui-nav-item"><a class="" href=""><i class="layui-icon layui-icon-app"></i><cite
+                        style="margin-left: 10px">云市场</cite></a></li>
+                <li class="layui-nav-item"><a href=""><i class="layui-icon layui-icon-star"><cite
+                        style="margin-left: 10px">发布商品</cite></i></a></li>
             </ul>
-
         </div>
+    </div>
 
 
-            <!--侧边栏-->
-        <div class="layui-side layui-bg-black">
-            <div class="layui-side-scroll">
-                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a class="" href="javascript:;" ><i class="layui-icon layui-icon-set"></i><cite style="margin-left: 10px">后台管理</cite></a>
-                        <dl class="layui-nav-child ">
-                            <dd class="" th:class="${activeUri=='emps'?'layui-this':''}"><a href="/emp/list">员工列表</a></dd>
-                            <dd class="" th:class="${activeUri=='depts'?'layui-this':''}"><a href="/dept/list">部门列表</a></dd>
-                            <dd class="" th:class="${activeUri=='roles'?'layui-this':''}"> <a href="/role/list"><span>角色管理</span></a></dd>
-                            <dd class="" th:class="${activeUri=='permissions'?'layui-this':''}"> <a href="/perm/list"><span>权限管理</span></a></dd>
-
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item ">
-                        <a href="javascript:;" class=""><i class="layui-icon layui-icon-component"></i><cite style="margin-left: 10px">解决方案</cite></a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">列表一</a></dd>
-                            <dd><a href="javascript:;">列表二</a></dd>
-                            <dd><a href="">超链接</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item"><a class="" href=""><i class="layui-icon layui-icon-app"></i><cite style="margin-left: 10px">云市场</cite></a></li>
-                    <li class="layui-nav-item"><a  href=""><i class="layui-icon layui-icon-star"><cite style="margin-left: 10px">发布商品</cite></i></a></li>
-                </ul>
-            </div>
-        </div>
-
-
-
-
-    </nav>
+</nav>
 
 </body>
 
 <script>
     $.
 
-    //JavaScript代码区域
-    layui.use('element', function(){
+        //JavaScript代码区域
+        layui.use('element', function () {
         var element = layui.element;
 
     });
     var isShow = true;  //定义一个标志位
-    $('.kit-side-fold').click(function(){
+    $('.kit-side-fold').click(function () {
         //选择出所有的span，并判断是不是hidden
-        $('.layui-nav-item span').each(function(){
-            if($(this).is(':hidden')){
+        $('.layui-nav-item span').each(function () {
+            if ($(this).is(':hidden')) {
                 $(this).show();
-            }else{
+            } else {
                 $(this).hide();
             }
         });
         //判断isshow的状态
-        if(isShow){
+        if (isShow) {
             $('.layui-side.layui-bg-black').width(60); //设置宽度
             $('.kit-side-fold i').css('margin-right', '70%');  //修改图标的位置
             //将footer和body的宽度修改
-            $('.layui-body').css('left', 60+'px');
-            $('.layui-footer').css('left', 60+'px');
+            $('.layui-body').css('left', 60 + 'px');
+            $('.layui-footer').css('left', 60 + 'px');
             //将二级导航栏隐藏
-            $('dd span').each(function(){
+            $('dd span').each(function () {
                 $(this).hide();
             });
             //修改标志位
-            isShow =false;
-        }else{
+            isShow = false;
+        } else {
             $('.layui-side.layui-bg-black').width(200);
             $('.kit-side-fold i').css('margin-right', '10%');
-            $('.layui-body').css('left', 200+'px');
-            $('.layui-footer').css('left', 200+'px');
-            $('dd span').each(function(){
+            $('.layui-body').css('left', 200 + 'px');
+            $('.layui-footer').css('left', 200 + 'px');
+            $('dd span').each(function () {
                 $(this).show();
             });
-            isShow =true;
+            isShow = true;
         }
     });
 

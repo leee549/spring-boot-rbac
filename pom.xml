@@ -18,6 +18,8 @@
         <druid-spring-boot.version>1.1.10</druid-spring-boot.version>
         <pagehelper.version>5.1.2</pagehelper.version>
         <esay-captch.version>1.6.2</esay-captch.version>
+        <shiro.version>1.4.0</shiro.version>
+        <redis.version>2.2.5.RELEASE</redis.version>
     </properties>
 
     <dependencies>
@@ -56,16 +58,28 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
-        <!--分页插件-->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-        </dependency>
         <!--验证码框架-->
         <dependency>
             <groupId>com.github.whvcse</groupId>
             <artifactId>easy-captcha</artifactId>
         </dependency>
+        <!--shiro与spring集成  会导入shiro core 和shiro web-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+        <!--redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- fastjson  -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.54</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -120,7 +134,18 @@
                 <artifactId>easy-captcha</artifactId>
                 <version>${esay-captch.version}</version>
             </dependency>
-
+            <!--shiro-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <!--redis-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
+            </dependency>
 
 
 
@@ -139,6 +164,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+
                     <source>8</source>
                     <target>8</target>
                 </configuration>

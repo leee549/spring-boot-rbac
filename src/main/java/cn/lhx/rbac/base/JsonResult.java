@@ -1,6 +1,6 @@
 package cn.lhx.rbac.base;
 
-import cn.lhx.rbac.enmus.JsEnm;
+import cn.lhx.rbac.core.enmus.ResultCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,7 +45,7 @@ public class JsonResult<T> {
      * @return
      */
     public static <T> JsonResult<Object> success(T data) {
-        return JsonResult.builder().ret(true).code(JsEnm.SUCCESS.val).data(data).build();
+        return JsonResult.builder().ret(true).code(ResultCode.SUCCESS.val).data(data).build();
 
     }
 
@@ -56,5 +56,8 @@ public class JsonResult<T> {
 
     public static <T> JsonResult<Object> error(String msg) {
         return JsonResult.builder().ret(false).msg(msg).build();
+    }
+    public static <T> JsonResult<Object> error(String msg,Object data) {
+        return JsonResult.builder().ret(false).msg(msg).data(data).build();
     }
 }

@@ -3,8 +3,10 @@ package cn.lhx.rbac.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.lhx.rbac.base.Page;
+import cn.lhx.rbac.dao.PermissionDao;
 import cn.lhx.rbac.dao.RoleDao;
 import cn.lhx.rbac.entity.Employee;
+import cn.lhx.rbac.entity.Permission;
 import cn.lhx.rbac.entity.Role;
 import cn.lhx.rbac.service.RoleService;
 import cn.lhx.rbac.util.PageUtil;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -25,6 +28,7 @@ import java.util.stream.Stream;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleService {
   @Resource RoleDao roleDao;
+
 
   @Override
   public List<Role> getByEmpId(Long id) {
@@ -41,6 +45,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleDao, Role> implements RoleS
     }
     IPage<Role> pageInfo = roleDao.selectPage(page, qw);
     return PageUtil.toMap(pageInfo);
+  }
+
+  @Override
+  public Set<String> querySnByEmployeeId(Long id) {
+    return roleDao.querySnByEmployeeId(id);
+  }
+
+  @Override
+  public List<Permission> getByRoleId(Long id) {
+    return roleDao.getByRoleId(id);
   }
 
   @Override
