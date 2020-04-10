@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lhx.rbac.dao.RoleDao">
-    <!--<cache-ref namespace="cn.lhx.rbac.cache.MybatisCache"/>-->
     <!--自定义映射-->
     <resultMap id="BaseResultMap" type="Role">
         <id column="id" property="id"/>
@@ -11,7 +10,7 @@
         <result column="sn" property="sn"/>
 
     </resultMap>
-
+    <!--<cache-ref namespace="cn.lhx.rbac.dao.EmployeeDao"/>-->
     <select id="selectByEmpId" resultMap="BaseResultMap">
         select *
         from role r

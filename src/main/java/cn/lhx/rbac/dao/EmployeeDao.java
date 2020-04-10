@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.CacheNamespace;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -16,17 +15,18 @@ import org.apache.ibatis.annotations.Param;
  * @date 2020/3/25 12:01
  */
 @CacheNamespace(implementation = MybatisCache.class,eviction = MybatisCache.class)
-@Mapper
-public interface EmployeeDao extends BaseMapper<Employee>{
-    /**
-     * 分页模糊查询
-     * @param page
-     * @param queryWrapper
-     * @return
-     */
-    IPage<Employee> empList(Page<Employee> page,@Param(Constants.WRAPPER) Wrapper<Employee> queryWrapper);
+public interface EmployeeDao extends BaseMapper<Employee> {
+  /**
+   * 分页模糊查询
+   *
+   * @param page
+   * @param queryWrapper
+   * @return
+   */
+  IPage<Employee> empList(
+      Page<Employee> page, @Param(Constants.WRAPPER) Wrapper<Employee> queryWrapper);
 
-    void insertRelation(@Param("employeeId") Long employeeId, @Param("roleId") Long ids);
+  void insertRelation(@Param("employeeId") Long employeeId, @Param("roleId") Long ids);
 
-    void deleteRelation(@Param("employeeId") Long employeeId);
+  void deleteRelation(@Param("employeeId") Long employeeId);
 }

@@ -9,6 +9,7 @@ import java.util.Set;
  * @author lee549
  * @date 2020/3/25 12:01
  */
+// @CacheNamespace(implementation = MybatisCache.class,eviction = MybatisCache.class)
 public interface PermissionDao extends BaseMapper<Permission> {
 
     Set<String> selectByEmployeeId(Long id);

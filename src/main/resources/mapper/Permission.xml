@@ -3,12 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lhx.rbac.dao.PermissionDao">
-    <!--<cache-ref namespace="cn.lhx.rbac.cache.MybatisCache"/>-->
     <resultMap id="BaseResultMap" type="Permission">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="expression" property="expression"/>
     </resultMap>
+    <!--<cache-ref namespace="cn.lhx.rbac.dao.EmployeeDao"/>-->
     <select id="selectByEmployeeId" resultMap="BaseResultMap">
         SELECT
         DISTINCT p.expression

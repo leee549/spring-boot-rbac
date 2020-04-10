@@ -21,7 +21,6 @@ spring:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
-    mode: LEGACYHTML5
     #数据源
   datasource:
     username: root
@@ -59,12 +58,11 @@ spring:
 
 #mybatis-plus
 mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    cache-enabled: true
   global-config:
     banner: false
   #    别名
   type-aliases-package: cn.lhx.rbac.entity
+  configuration:
+    cache-enabled: true
 
 
