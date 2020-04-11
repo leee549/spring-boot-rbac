@@ -22,10 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class LoginController {
-  // @RequestMapping("/toLogin")
-  // public String toLogin() {
-  //   return "login";
-  // }
+
   @GetMapping("/login")
   public String toLogin() {
     return "login";
@@ -34,12 +31,15 @@ public class LoginController {
   @ResponseBody
   @PostMapping("/auth/login")
   public JsonResult<Object> login(String vercode, Employee employee, HttpServletRequest request) {
+    System.out.println(request.getSession());
     if (!CaptchaUtil.ver(vercode, request)) {
+       System.out.println(request.getSession().getAttribute("captcha") + "==========");
       // 清除session中的验证码
       CaptchaUtil.clear(request);
       return JsonResult.error("输入的验证不正确！");
     }
     Subject subject = SecurityUtils.getSubject();
+    System.out.println(subject.getSession().getAttribute("captcha")+"shiro====");
     UsernamePasswordToken token =
         new UsernamePasswordToken(employee.getName(), employee.getPassword(), false);
     subject.login(token);
@@ -59,6 +59,8 @@ public class LoginController {
     // 使用gif验证码
     GifCaptcha gifCaptcha = new GifCaptcha(130, 48, 4);
     CaptchaUtil.out(gifCaptcha, request, response);
+    // 验证码存入session
+    // request.getSession().setAttribute("captcha1", gifCaptcha.text().toLowerCase());
     // 中文类型
     //        ChineseCaptcha captcha = new ChineseCaptcha(130, 48);
     //        CaptchaUtil.out(captcha,request,response);

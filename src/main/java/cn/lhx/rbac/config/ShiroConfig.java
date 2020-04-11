@@ -1,15 +1,19 @@
 package cn.lhx.rbac.config;
 
 import cn.lhx.rbac.cache.ShiroCacheManager;
+import cn.lhx.rbac.cache.session.SessionDao;
 import cn.lhx.rbac.security.shiro.realm.MyRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,22 +31,22 @@ public class ShiroConfig {
    * @return
    */
   @Bean
-  public ShiroFilterFactoryBean shiroFilterFactoryBean() {
+  public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
     ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
-    bean.setSecurityManager(securityManager());
+    bean.setSecurityManager(securityManager);
     Map<String, String> filters = new LinkedHashMap<>();
     filters.put("/login", "anon");
     filters.put("/auth/login", "anon");
     filters.put("/captcha", "anon");
     filters.put("/static/**", "anon");
-    filters.put("/logout", "logout");
-    filters.put("/**", "authc");
+    filters.put("/logout", "anon");
+    // filters.put("/**", "authc");
     // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
     bean.setLoginUrl("/login");
     // 登录成功后要跳转的链接
     bean.setSuccessUrl("/emp/list");
     // 未授权界面;
-    // bean.setUnauthorizedUrl("/unauthorized");
+    bean.setUnauthorizedUrl("/unauthorized");
     bean.setFilterChainDefinitionMap(filters);
     return bean;
   }
@@ -53,10 +57,18 @@ public class ShiroConfig {
    * @return
    */
   @Bean
-  public DefaultWebSecurityManager securityManager() {
+  public DefaultWebSecurityManager securityManager(
+      ShiroCacheManager shiroCacheManager, DefaultSessionManager sessionManager) {
     DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
     securityManager.setRealm(myRealm());
-    securityManager.setCacheManager(shiroCacheManager());
+    securityManager.setCacheManager(shiroCacheManager);
+    securityManager.setSessionManager(sessionManager);
+    // 关闭shiro的session
+    // DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+    // DefaultSessionStorageEvaluator evaluator = new DefaultSessionStorageEvaluator();
+    // evaluator.setSessionStorageEnabled(false);
+    // subjectDAO.setSessionStorageEvaluator(evaluator);
+    // securityManager.setSubjectDAO(subjectDAO);
     return securityManager;
   }
 
@@ -70,16 +82,39 @@ public class ShiroConfig {
     MyRealm myRealm = new MyRealm();
     // 给 Realm 注入密文匹配Bean
     myRealm.setCredentialsMatcher(getHashedCredentialsMatcher());
-    myRealm.setAuthenticationCachingEnabled(true);
+    // myRealm.setAuthenticationCachingEnabled(true);
+    myRealm.setAuthorizationCachingEnabled(true);
     myRealm.setCachingEnabled(true);
     return myRealm;
   }
 
+  /**
+   * shiro 缓存管理器
+   *
+   * @return
+   */
   @Bean
-  public ShiroCacheManager shiroCacheManager() {
-    return new ShiroCacheManager();
+  public ShiroCacheManager shiroCacheManager(RedisTemplate<String, Object> redisTemplate) {
+    ShiroCacheManager shiroCacheManager = new ShiroCacheManager();
+    shiroCacheManager.setTemplate(redisTemplate);
+    return shiroCacheManager;
   }
 
+  /** Shiro 自己的Session管理器 关了shiroHttpSession */
+  @Bean
+  public DefaultWebSessionManager sessionManager(SessionDao sessionDao) {
+    DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+    sessionManager.setSessionDAO(sessionDao);
+    sessionManager.setGlobalSessionTimeout(1800000);
+    return sessionManager;
+  }
+
+  @Bean
+  public SessionDao sessionDao(RedisTemplate<String, Object> redisTemplate2) {
+    SessionDao sessionDao = new SessionDao();
+    sessionDao.setTemplate(redisTemplate2);
+    return sessionDao;
+  }
   /**
    * 凭证匹配器
    *

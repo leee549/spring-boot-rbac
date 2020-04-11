@@ -1,6 +1,5 @@
 package cn.lhx.rbac.cache;
 
-import cn.lhx.rbac.util.SpringContextUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.shiro.cache.Cache;
@@ -42,7 +41,6 @@ public class ShiroCache implements Cache {
   @Override
   public Object get(Object o) throws CacheException {
     System.out.println("权限信息检查缓存");
-    template = (RedisTemplate<String, Object>) SpringContextUtil.getBean("redisTemplate");
     Object data = template.opsForValue().get(o.toString());
     if (data == null) {
       System.out.println("权限信息检查缓存 未命中");
@@ -62,7 +60,7 @@ public class ShiroCache implements Cache {
    */
   @Override
   public Object put(Object o, Object o2) throws CacheException {
-    template = (RedisTemplate<String, Object>) SpringContextUtil.getBean("redisTemplate");
+
     template.opsForValue().set(o.toString(), o2);
     return null;
   }
@@ -77,7 +75,7 @@ public class ShiroCache implements Cache {
   @Override
   public Object remove(Object o) throws CacheException {
     System.out.println(o + "的权限信息缓存被删除");
-    template = (RedisTemplate<String, Object>) SpringContextUtil.getBean("redisTemplate");
+
     template.delete(o.toString());
     return null;
   }
