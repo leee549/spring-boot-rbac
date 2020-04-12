@@ -16,7 +16,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    //路径映射，addResourceHandler：虚拟路径     addResourceLocations：物理路径
     registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+    registry.addResourceHandler("/file/**").addResourceLocations("file:f:/");
   }
 
   @Override
@@ -25,6 +27,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     registry.addViewController("/index.html").setViewName("login");
     registry.addViewController("/login").setViewName("login");
     registry.addViewController("/main.html").setViewName("dashboard");
+
   }
 
   @Bean

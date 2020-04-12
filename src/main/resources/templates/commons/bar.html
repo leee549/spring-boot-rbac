@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script th:src="@{/static/js/jquery/jquery.min.js}" charset="utf-8"></script>
+    <script th:src="@{/static/layui/layui.js}" charset="UTF-8"></script>
 </head>
 <body>
 <nav th:fragment="topbar">
@@ -25,7 +27,8 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img th:href="@{/static/favicon.ico}" class="layui-nav-img">
+                    <!--头像-->
+                    <img id="picture" src="" class="layui-nav-img">
                     admin
                 </a>
                 <dl class="layui-nav-child">
@@ -74,16 +77,30 @@
         </div>
     </div>
 
-
+    <script>
+        $.ajax({
+            type: 'get',
+            url: '/getPicture',
+            success: function (res) {
+                console.log(res.data);
+                $('#picture').attr('src', res.data);
+            }
+        });
+    </script>
 </nav>
 
 </body>
 
 <script>
-    $.
 
-        //JavaScript代码区域
-        layui.use('element', function () {
+    // 获取头像
+    // $.get(/getPicture, function (res) {
+    //     console.log("====images:" + res);
+    //     $('#picture').attr('src', res.image)
+    // }, 'json');
+
+
+    layui.use('element', function () {
         var element = layui.element;
 
     });

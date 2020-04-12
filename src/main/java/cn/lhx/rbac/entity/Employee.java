@@ -20,7 +20,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName
+@TableName("employee")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -39,4 +39,6 @@ public class Employee implements Serializable {
     private Date birth;
     @TableField(exist = false)
     private Department dept;
+    @TableField(value = "picture")
+    private String picture;
 }
