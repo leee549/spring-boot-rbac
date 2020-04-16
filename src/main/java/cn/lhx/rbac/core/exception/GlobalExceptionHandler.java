@@ -1,5 +1,6 @@
 package cn.lhx.rbac.core.exception;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.lhx.rbac.base.JsonResult;
 import cn.lhx.rbac.core.enmus.ResultCode;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public String unkownException(Exception ex) {
     map.put("data", ex);
+    log.error("未知异常:{}", ExceptionUtil.stacktraceToString(ex));
     return "forward:/error";
   }
 }

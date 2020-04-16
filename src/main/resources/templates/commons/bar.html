@@ -18,7 +18,7 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">其它系统</a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a th:href="@{/mail}">邮件管理</a></dd>
                     <dd><a href="">消息管理</a></dd>
                     <dd><a href="">授权管理</a></dd>
                 </dl>
@@ -26,12 +26,19 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
+                <a href="">控制台<span class="layui-badge">9</span></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="">个人中心<span class="layui-badge-dot"></span></a>
+            </li>
+            <li class="layui-nav-item">
                 <a href="javascript:;">
                     <!--头像-->
                     <img id="picture" src="" class="layui-nav-img">
-                    admin
+                    我
                 </a>
                 <dl class="layui-nav-child">
+                    <button type="button" class="layui-btn layui-btn-danger" id="test7"><i class="layui-icon"></i>上传头像</button>
                     <dd><a href="">基本资料</a></dd>
                     <dd><a href="">安全设置</a></dd>
                 </dl>
@@ -40,18 +47,20 @@
         </ul>
 
     </div>
+<div>
 
+</div>
 
     <!--侧边栏-->
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
+            <ul class="layui-nav layui-nav-tree " lay-shrink="all" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed " >
                     <a class="" href="javascript:;"><i class="layui-icon layui-icon-set"></i><cite
                             style="margin-left: 10px">后台管理</cite></a>
                     <dl class="layui-nav-child ">
-                        <dd class="" th:class="${activeUri=='emps'?'layui-this':''}"><a href="/emp/list">员工列表</a></dd>
+                        <dd class="" lay- th:class="${activeUri=='emps'?'layui-this':''}"><a href="/emp/list">员工列表</a></dd>
                         <dd class="" th:class="${activeUri=='depts'?'layui-this':''}"><a href="/dept/list">部门列表</a></dd>
                         <dd class="" th:class="${activeUri=='roles'?'layui-this':''}"><a
                                 href="/role/list"><span>角色管理</span></a></dd>
@@ -60,24 +69,48 @@
 
                     </dl>
                 </li>
-                <li class="layui-nav-item ">
+                <li class="layui-nav-item layui-nav-itemed ">
                     <a href="javascript:;" class=""><i class="layui-icon layui-icon-component"></i><cite
-                            style="margin-left: 10px">解决方案</cite></a>
+                            style="margin-left: 10px">其他</cite></a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">列表一</a></dd>
-                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd th:class="${activeUri=='mail'?'layui-this':''}"><a href="/mail"  >邮件管理</a></dd>
+                        <dd th:class="${activeUri=='member'?'layui-this':''}"><a href="/toMember"  >会员注册</a></dd>
                         <dd><a href="">超链接</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a class="" href=""><i class="layui-icon layui-icon-app"></i><cite
+                <li class="layui-nav-item" lay-unselect><a class="" href=""><i class="layui-icon layui-icon-app"></i><cite
                         style="margin-left: 10px">云市场</cite></a></li>
                 <li class="layui-nav-item"><a href=""><i class="layui-icon layui-icon-star"><cite
                         style="margin-left: 10px">发布商品</cite></i></a></li>
             </ul>
         </div>
     </div>
-
+    <!--显示头像-->
     <script>
+
+        layui.use([ 'element',  "layer", 'upload'], function () {
+
+            var  upload = layui.upload    //上传
+        //设定文件大小限制
+        upload.render({
+            elem: '#test7'
+            ,url: '/upload' //改成您自己的上传接口
+            ,size: 70 //限制文件大小，单位 KB
+            , done: function (res) {
+                layer.msg('上传成功');
+                $.ajax({
+                    type: 'get',
+                    url: '/getPicture',
+                    success: function (res) {
+                        console.log(res.data);
+                        $('#picture').attr('src', res.data);
+                    }
+                });
+                console.log(res);
+            }
+        })
+        });
+
         $.ajax({
             type: 'get',
             url: '/getPicture',
@@ -86,6 +119,9 @@
                 $('#picture').attr('src', res.data);
             }
         });
+
+
+
     </script>
 </nav>
 

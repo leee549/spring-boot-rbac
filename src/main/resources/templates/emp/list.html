@@ -411,9 +411,8 @@
             , url: '/upload' //改成您自己的上传接口
             , done: function (res) {
                 layer.msg('上传成功');
-
-                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
-                console.log(res)
+                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src','\\file\\images\\'+ res.data);
+                console.log(res);
             }
         });
 

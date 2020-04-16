@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -59,15 +60,43 @@ public class FileUploadController {
 
     return JsonResult.success(uniqueFileName);
   }
+  @RequestMapping("/upload/mail")
+  @ResponseBody
+  public JsonResult<Object> uploadMail(MultipartFile file) throws IOException {
+    // 设置随机前缀名
+    String fileName = UUID.randomUUID().toString();
+    // 获取源文件名
+    String originalFilename = file.getOriginalFilename();
+    // 获取后缀
+    String extension = originalFilename.substring(originalFilename.indexOf("."));
+    // 拼接文件名
+    String uniqueFileName = fileName + extension;
+    // 2.文件上传类型
+    String contentType = file.getContentType();
+
+    if ("image/jpeg".equals(contentType)
+            || "image/png".equals(contentType)
+            || "image/jpg".equals(contentType)) {
+      // 上传
+      file.transferTo(new File("f:" + File.separator + "images" + File.separator + uniqueFileName));
+      System.out.println("f:" + File.separator + "images" + File.separator + uniqueFileName);
+    }
+    HashMap<Object, Object> map = new HashMap<>(2);
+    map.put("src", "\\file\\images\\"+uniqueFileName);
+    map.put("title", uniqueFileName);
+    return JsonResult.success(map,0);
+  }
 
   @ResponseBody
   @GetMapping("/getPicture")
   public JsonResult<Object> getPicture() {
+    //从session中获取
     Subject subject = SecurityUtils.getSubject();
     Employee employee = (Employee) subject.getPrincipal();
-    String picture = employee.getPicture();
-    System.out.println("picture:" + picture);
-    return JsonResult.success(picture);
+    //查询数据库不然有缓存
+    Employee emp = employeeService.selectByName(employee.getName());
+    System.out.println("picture:" + emp.getPicture());
+    return JsonResult.success(emp.getPicture());
   }
 
 

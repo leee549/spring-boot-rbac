@@ -48,6 +48,10 @@ public class JsonResult<T> {
         return JsonResult.builder().ret(true).code(ResultCode.SUCCESS.val).data(data).build();
 
     }
+    public static <T> JsonResult<Object> success(T data,Integer code) {
+        return JsonResult.builder().ret(true).code(code).data(data).build();
+
+    }
 
     public static <T> JsonResult<Object> error() {
         return JsonResult.builder().ret(false).build();

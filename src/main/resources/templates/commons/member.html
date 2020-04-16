@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>基于springboot 的权限管理后台</title>
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}">
+    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
+    <script th:src="@{/static/js/jquery/jquery.min.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--引入topbar-->
+    <div th:replace="commons/bar::topbar(activeUri='member')"></div>
+
+    <div class="layui-body">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">网站设置</li>
+                <li>用户管理</li>
+                <li>权限分配</li>
+                <li>商品管理</li>
+                <li>订单管理</li>
+            </ul>
+            <div class="layui-tab-content"></div>
+        </div>
+        <form class="layui-form layui-form" action="">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" id="name" name="name" lay-reqtext="用户名是必填项，岂能为空？" lay-verify="required"
+                           style="border-radius:9px;" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="email" id="email" name="email" autocomplete="off"
+                           style="border-radius:9px;" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <!--<button type="button" id="getcode"  class="layui-btn layui-btn-sm  layui-btn-radius ">获取验证码</button>-->
+                    <input type="button" id="getcode" class="layui-btn layui-btn-sm  layui-btn-radius " value="获取验证码">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>验证码</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" id="code" name="code" autocomplete="off"
+                           style="border-radius:9px;" class="layui-input">
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+</div>
+
+
+</body>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , $ = layui.jquery;
+
+
+        $('#getcode').click(function () {
+            var email = $("#email").val();
+            var name = $("#name").val();
+            if (email==null||name==null){
+                layer.msg("用户名或邮箱不能为空！")
+                return false;
+            }
+                //倒计时
+            var count = 10;
+            var countdown = setInterval(CountDown, 500);
+
+            function CountDown() {
+                $("#getcode").addClass("layui-btn-disabled");
+                $("#getcode").val("获取验证码(" + count + ")");
+                if (count == 0) {
+                    $("#getcode").removeClass("layui-btn-disabled");
+                    $("#getcode").val("获取验证码");
+                    clearInterval(countdown);
+                }
+                count--;
+            }
+
+            //发送邮件
+            console.log($('#email').val())
+            var to = $('#email').val()
+            $.ajax({
+                url:'/code',
+                type:'post',
+                data:{email:to},
+                traditional: true,//防止深度序列化
+            })
+        });
+
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            $.ajax({
+                type: 'post',
+                url: '/member',
+                data: data.field,
+                datatype: 'json',
+                success: function (res) {
+                    if (res.data.code===1)
+                    layer.msg(res.data.msg, {icon: 1, time: 1000, shade: 0.4}, function () {
+                        window.location.reload();
+                    });
+                    else if (res.data.code===0){
+                        layer.msg(res.data.msg, {icon: 2, time: 1000, shade: 0.4}, function () {
+                        });
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</html>

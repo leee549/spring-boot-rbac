@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>基于springboot 的权限管理后台</title>
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}">
+    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
+    <script th:src="@{/static/js/jquery/jquery.min.js}"></script>
+    <script th:src="@{/static/layui/layui.js}"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--引入topbar-->
+    <div th:replace="commons/bar::topbar(activeUri='mail')"></div>
+
+    <div class="layui-body">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">网站设置</li>
+                <li>用户管理</li>
+                <li>权限分配</li>
+                <li>商品管理</li>
+                <li>订单管理</li>
+            </ul>
+            <div class="layui-tab-content"></div>
+        </div>
+        <form class="layui-form layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>收件人</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="email" name="to" autocomplete="off" style="border-radius:9px;" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="subject" lay-reqtext="标题是必填项，岂能为空？" lay-verify="required" style="border-radius:9px;" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <!--文本域-->
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <textarea id="demo" name="content" style="display: none;"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+</div>
+</body>
+
+
+<script>
+    layui.use(['layedit', 'form'], function () {
+        var layedit = layui.layedit,
+        form = layui.form;
+        layedit.set({
+            uploadImage: {
+                url: '/upload/mail' //接口url
+                ,type: 'post' //默认post
+            }
+        });
+        //注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。
+        var index = layedit.build('demo')
+        //建立编辑器
+        //console.log(index)
+
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            //设置内容
+            data.field.context=layedit.getContent(index)
+            //图片路径
+            //test=layedit.getText(index)
+            //            console.log("========="+data.field.context)
+
+            var content =layedit.getContent(index)
+            var $div = document.createElement("div");//创建一个div元素对象
+            $div.innerHTML = content;//往div里填充html
+            var $v = $($div);//从dom对象转换成jquery对象
+            var filepath = "";
+            $.each($v.find("img"),function (v,i) {//选择器找到img元素，循环获取src值
+                filepath=i.src;
+                console.log("src======" + i.src);
+            });
+            data.field.filePath = filepath
+            //
+            $.ajax({
+                type:'post',
+                url:'/mail/img',
+                data:data.field,
+                traditional: true,//防止深度序列化
+                datatype:'json',
+                success:function (res) {
+                    layer.msg(res.data, {icon: 1, time: 1000, shade: 0.4}, function () {
+                       // window.location.reload();
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>

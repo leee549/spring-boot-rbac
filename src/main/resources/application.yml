@@ -17,6 +17,19 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     #模板引擎
+  freemarker:
+    cache: false
+    # 字符集
+    charset: UTF-8
+    # 检查模板位置
+    check-template-location: true
+    # 模板内容类型
+    content-type: text/html
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: request
+    # 模板位置
+    template-loader-path: classpath:/templates
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
@@ -54,7 +67,14 @@ spring:
         min-idle: 0 # 连接池中的最小空闲连接
     timeout: 1000 # 连接超时时间（毫秒）
     database: 0 #Redis数据库索引（默认为0）
-
+    #邮箱管理    密码是授权码
+  mail:
+    host: smtp.qq.com
+    username: 1193106371@qq.com
+    password: pfyyijygfrgvhjgf
+    default-encoding: utf-8
+    port: 587
+    from: 1193106371@qq.com
 
 #mybatis-plus
 mybatis-plus:
@@ -64,5 +84,4 @@ mybatis-plus:
   type-aliases-package: cn.lhx.rbac.entity
   configuration:
     cache-enabled: true
-
 

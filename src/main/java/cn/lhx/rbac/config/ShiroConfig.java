@@ -1,6 +1,7 @@
 package cn.lhx.rbac.config;
 
 import cn.lhx.rbac.cache.ShiroCacheManager;
+import cn.lhx.rbac.cache.session.MySessionManager;
 import cn.lhx.rbac.cache.session.SessionDao;
 import cn.lhx.rbac.security.shiro.realm.MyRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -9,7 +10,6 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -102,8 +102,8 @@ public class ShiroConfig {
 
   /** Shiro 自己的Session管理器 关了shiroHttpSession */
   @Bean
-  public DefaultWebSessionManager sessionManager(SessionDao sessionDao) {
-    DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+  public MySessionManager sessionManager(SessionDao sessionDao) {
+    MySessionManager sessionManager = new MySessionManager();
     sessionManager.setSessionDAO(sessionDao);
     sessionManager.setGlobalSessionTimeout(1800000);
     return sessionManager;
